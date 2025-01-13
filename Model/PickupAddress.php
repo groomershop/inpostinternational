@@ -179,7 +179,7 @@ class PickupAddress extends AbstractModel implements PickupAddressInterface
      */
     public function getCountryCode(): string
     {
-        return 'PL';
+        return $this->getData(self::COUNTRY_CODE);
     }
 
     /**

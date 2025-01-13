@@ -30,7 +30,7 @@ class LanguageCode implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $configuredCountries = explode(',', $this->configProvider->getShippingCountries());
+        $configuredCountries = array_keys($this->countrySettings->getAllCountrySettings());
         $options = [];
 
         if (is_array($configuredCountries)) {

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smartcore\InPostInternational\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;
@@ -42,7 +45,7 @@ class ParcelTemplateActions extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $item[$this->getData('name')] = [
                     'edit' => [
                         'href' => $this->urlBuilder->getUrl(

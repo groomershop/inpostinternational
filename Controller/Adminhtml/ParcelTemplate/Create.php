@@ -39,7 +39,7 @@ class Create extends Action
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend(__('Create Parcel Template')->getText());
+        $resultPage->getConfig()->getTitle()->prepend(__('Create Parcel Template')->render());
 
         return $resultPage;
     }
@@ -49,7 +49,7 @@ class Create extends Action
      *
      * @return bool
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
         return $this->_authorization->isAllowed('Smartcore_InPostInternational::parcel_create');
     }

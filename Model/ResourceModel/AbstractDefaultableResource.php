@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smartcore\InPostInternational\Model\ResourceModel;
 
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -20,7 +23,7 @@ abstract class AbstractDefaultableResource extends AbstractDb
      */
     public function save(AbstractModel $object): AbstractDb
     {
-        if ($object->getData('is_default') == 1) {
+        if ($object->getData('is_default') == 1 && $object->getOrigData('is_default') != 1) {
             $this->unsetDefault();
         }
         return parent::save($object);

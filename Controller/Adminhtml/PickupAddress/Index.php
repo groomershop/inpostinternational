@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smartcore\InPostInternational\Controller\Adminhtml\PickupAddress;
 
 use Magento\Backend\App\Action;
@@ -30,14 +33,14 @@ class Index extends Action
     }
 
     /**
-     * Parcel Template List
+     * Pickup Template List
      *
      * @return ResponseInterface|ResultInterface|Page
      */
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend(__('InPost International Pickup address'));
+        $resultPage->getConfig()->getTitle()->prepend(__('InPost International Pickup address')->render());
         return $resultPage;
     }
 
@@ -46,7 +49,7 @@ class Index extends Action
      *
      * @return bool
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
         return $this->_authorization->isAllowed('Smartcore_InPostInternational::pickupaddress_index');
     }

@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Smartcore\InPostInternational\Controller\Adminhtml\Shipments;
+namespace Smartcore\InPostInternational\Controller\Adminhtml\Shipment;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
-class Create extends Action
+class Index extends Action
 {
     /**
      * @var PageFactory
      */
-    protected PageFactory $resultPageFactory;
+    protected $resultPageFactory;
 
     /**
      * Constructor
@@ -31,16 +33,14 @@ class Create extends Action
     }
 
     /**
-     * Create new InPost International Shipment form
+     * Shipments List
      *
-     * @return Page
+     * @return ResponseInterface|ResultInterface|Page
      */
-    public function execute(): Page
+    public function execute()
     {
-        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->set(__('New InPost International Shipment')->getText());
-
+        $resultPage->getConfig()->getTitle()->prepend(__('InPost International Shipments')->render());
         return $resultPage;
     }
 
@@ -49,8 +49,8 @@ class Create extends Action
      *
      * @return bool
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
-        return $this->_authorization->isAllowed('Smartcore_InPostInternational::shipments_create');
+        return $this->_authorization->isAllowed('Smartcore_InPostInternational::shipments_index');
     }
 }

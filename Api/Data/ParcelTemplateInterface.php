@@ -7,6 +7,7 @@ namespace Smartcore\InPostInternational\Api\Data;
 interface ParcelTemplateInterface
 {
     public const string ENTITY_ID = 'entity_id';
+    public const string TYPE = 'type';
     public const string LABEL = 'label';
     public const string IS_DEFAULT = 'is_default';
     public const string LENGTH = 'length';
@@ -32,6 +33,21 @@ interface ParcelTemplateInterface
      * @return $this
      */
     public function setEntityId(int $entityId): self;
+
+    /**
+     * Get type
+     *
+     * @return string|null
+     */
+    public function getType(): ?string;
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType(string $type): self;
 
     /**
      * Get label

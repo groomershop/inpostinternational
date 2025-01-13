@@ -21,7 +21,7 @@ class Delete extends Action
      */
     public function __construct(
         Context                          $context,
-        private PickupAddressRepository $pickupAddrRepository
+        private readonly PickupAddressRepository $pickupAddrRepository
     ) {
         parent::__construct($context);
     }
@@ -40,7 +40,7 @@ class Delete extends Action
             $model = $this->pickupAddrRepository->load($modelId);
             try {
                 $this->pickupAddrRepository->delete($model);
-                $this->messageManager->addSuccessMessage(__('Pickup address has been deleted.')->getText());
+                $this->messageManager->addSuccessMessage(__('Pickup address has been deleted.')->render());
                 return $resultRedirect->setPath('*/*/');
             } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -48,5 +48,15 @@ class Delete extends Action
         }
 
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Check if user has permissions to visit the controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed(): bool
+    {
+        return $this->_authorization->isAllowed('Smartcore_InPostInternational::pickupaddress_create');
     }
 }

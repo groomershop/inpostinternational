@@ -27,7 +27,7 @@ class ParcelTemplate extends AbstractModel implements ParcelTemplateInterface
      */
     public function getEntityId(): ?int
     {
-        return $this->_getData('entity_id');
+        return $this->_getData(self::ENTITY_ID);
     }
 
     /**
@@ -38,7 +38,7 @@ class ParcelTemplate extends AbstractModel implements ParcelTemplateInterface
      */
     public function setEntityId($entityId): static
     {
-        return $this->setData('entity_id', $entityId);
+        return $this->setData(self::ENTITY_ID, $entityId);
     }
 
     /**
@@ -216,7 +216,7 @@ class ParcelTemplate extends AbstractModel implements ParcelTemplateInterface
      */
     public function getDimensionUnit(): ?string
     {
-        return 'cm';
+        return $this->getData(self::DIMENSION_UNIT);
     }
 
     /**
@@ -237,7 +237,7 @@ class ParcelTemplate extends AbstractModel implements ParcelTemplateInterface
      */
     public function getWeightUnit(): ?string
     {
-        return 'kg';
+        return $this->getData(self::WEIGHT_UNIT);
     }
 
     /**
@@ -249,5 +249,26 @@ class ParcelTemplate extends AbstractModel implements ParcelTemplateInterface
     public function setWeightUnit(?string $weightUnit): static
     {
         return $this->setData(self::WEIGHT_UNIT, $weightUnit);
+    }
+
+    /**
+     * Get type
+     *
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->getData(self::TYPE);
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType(string $type): static
+    {
+        return $this->setData(self::TYPE, $type);
     }
 }

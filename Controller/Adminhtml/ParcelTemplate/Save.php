@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smartcore\InPostInternational\Controller\Adminhtml\ParcelTemplate;
 
 use Magento\Backend\App\Action;
@@ -7,7 +10,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Smartcore\InPostInternational\Model\ParcelTemplateFactory;
-use Smartcore\InPostInternational\Model\PickupAddressRepository;
+use Smartcore\InPostInternational\Model\ParcelTemplateRepository;
 
 class Save extends Action
 {
@@ -17,12 +20,12 @@ class Save extends Action
      *
      * @param Context $context
      * @param ParcelTemplateFactory $parcelTmplFactory
-     * @param PickupAddressRepository $parcelTmplRepository
+     * @param ParcelTemplateRepository $parcelTmplRepository
      */
     public function __construct(
         Context                          $context,
         protected ParcelTemplateFactory  $parcelTmplFactory,
-        private PickupAddressRepository $parcelTmplRepository
+        private ParcelTemplateRepository $parcelTmplRepository
     ) {
         parent::__construct($context);
     }
@@ -48,7 +51,7 @@ class Save extends Action
 
             try {
                 $this->parcelTmplRepository->save($model);
-                $this->messageManager->addSuccessMessage(__('Parcel template has been saved.'));
+                $this->messageManager->addSuccessMessage(__('Parcel template has been saved.')->render());
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -56,5 +59,15 @@ class Save extends Action
         }
 
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Check if user has permissions to visit the controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed(): bool
+    {
+        return $this->_authorization->isAllowed('Smartcore_InPostInternational::parcel_create');
     }
 }

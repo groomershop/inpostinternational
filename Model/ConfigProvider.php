@@ -14,7 +14,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\FlagManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
+use Smartcore\InPostInternational\Model\Carrier\InpostCourier;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigProvider
 {
     public const string SHIPPING_CONFIG_PATH = 'shipping/inpostinternational/';
@@ -34,7 +39,8 @@ class ConfigProvider
      * @param StoreManagerInterface $storeManager
      * @param FlagManager $flagManager
      * @param RequestInterface $request
-     * @throws NoSuchEntityException
+     * @param LoggerInterface $logger
+     * @param InpostCourier $inpostCourier
      */
     public function __construct(
         private readonly ScopeConfigInterface   $scopeConfig,
@@ -43,7 +49,9 @@ class ConfigProvider
         private readonly Config                 $_resourceConfig,
         private readonly StoreManagerInterface  $storeManager,
         private readonly FlagManager            $flagManager,
-        private readonly RequestInterface       $request
+        private readonly RequestInterface       $request,
+        private readonly LoggerInterface        $logger,
+        private readonly InpostCourier          $inpostCourier,
     ) {
     }
 
@@ -51,8 +59,6 @@ class ConfigProvider
      * Get mode
      *
      * @return string
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function getMode(): string
     {
@@ -63,8 +69,6 @@ class ConfigProvider
      * Get client id
      *
      * @return string
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function getClientId(): string
     {
@@ -75,8 +79,6 @@ class ConfigProvider
      * Get client secret
      *
      * @return string
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function getClientSecret(): string
     {
@@ -89,8 +91,6 @@ class ConfigProvider
      * Get client secret
      *
      * @return string
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function getWellKnownUrl(): string
     {
@@ -101,32 +101,26 @@ class ConfigProvider
      * Get client secret
      *
      * @return string|null
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function getRawAccessToken(): ?string
     {
-        return $this->doGetShippingConfig(self::ACCESS_TOKEN);
+        return $this->flagManager->getFlagData(self::ACCESS_TOKEN);
     }
 
     /**
      * Get client secret
      *
-     * @return string|null
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
+     * @return int|null
      */
-    public function getAccessTokenExpiresAt(): ?string
+    public function getAccessTokenExpiresAt(): ?int
     {
-        return $this->doGetShippingConfig(self::ACCESS_TOKEN_EXPIRES_AT);
+        return $this->flagManager->getFlagData(self::ACCESS_TOKEN_EXPIRES_AT);
     }
 
     /**
      * Get client secret
      *
      * @return string|null
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function getRawRefreshToken(): ?string
     {
@@ -155,9 +149,6 @@ class ConfigProvider
 
     /**
      * Get weight attribute code
-     *
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
      */
     public function getWeightAttributeCode()
     {
@@ -166,9 +157,6 @@ class ConfigProvider
 
     /**
      * Get weight unit
-     *
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
      */
     public function getWeightUnit()
     {
@@ -177,13 +165,111 @@ class ConfigProvider
 
     /**
      * Get configured shipping countries
-     *
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
      */
     public function getShippingCountries()
     {
         return $this->doGetCarriersConfig('specificcountry');
+    }
+
+    /**
+     * Get shipping method title
+     */
+    public function getShippingMethodTitle()
+    {
+        return $this->doGetCarriersConfig('title');
+    }
+
+    /**
+     * Get default shipment type
+     *
+     * @return string
+     */
+    public function getShipmentType(): string
+    {
+        $sender = (array) $this->getSenderSettings();
+        return (string) $sender['shipment_type'];
+    }
+
+    /**
+     * Get sender settings
+     *
+     * @return array<string, mixed>
+     */
+    public function getSenderSettings(): array
+    {
+        return (array) $this->doGetShippingConfig('sender');
+    }
+
+    /**
+     * Get InPost tracking link
+     *
+     * @return string
+     */
+    public function getInPostTrackingLink(): string
+    {
+        return (string) $this->doGetShippingConfig('tracking_link');
+    }
+
+    /**
+     * Get InPost auto insurance setting
+     *
+     * @return string
+     */
+    public function getAutoInsuranceSetting(): string
+    {
+        return (string) $this->doGetShippingConfig('auto_insurance');
+    }
+
+    /**
+     * Get InPost fixed insurance value
+     *
+     * @return string
+     */
+    public function getInsuranceValue(): string
+    {
+        return (string) $this->doGetShippingConfig('auto_insurance_value');
+    }
+
+    /**
+     * Get InPost max insurance value
+     *
+     * @return string
+     */
+    public function getInsuranceMaxValue(): string
+    {
+        return (string) $this->doGetShippingConfig('max_insurance_value');
+    }
+
+    /**
+     * Get InPost auto inpostshipment create setting
+     *
+     * @return bool
+     */
+    public function isAutoInpostshipmentCreateEnabled(): bool
+    {
+        return (bool) $this->doGetShippingConfig('auto_inpostshipment_create');
+    }
+
+    /**
+     * Get auto order shipment create setting
+     *
+     * @return bool
+     */
+    public function isAutoOrderShipmentCreateEnabled(): bool
+    {
+        return (bool) $this->doGetShippingConfig('auto_shipment_create');
+    }
+
+    /**
+     * Get InPost auto inpostshipment create setting
+     *
+     * @return string|bool
+     */
+    public function getChangeOrderStatus(): string|bool
+    {
+        return $this->doGetShippingConfig('change_order_status')
+            ? (string) $this->doGetShippingConfig('change_order_status')
+            : false;
     }
 
     /**
@@ -204,12 +290,10 @@ class ConfigProvider
      *
      * @param mixed $accessToken
      * @return void
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function saveAccessToken(mixed $accessToken): void
     {
-        $this->saveShippingConfig(self::ACCESS_TOKEN, $accessToken);
+        $this->flagManager->saveFlag(self::ACCESS_TOKEN, $accessToken);
     }
 
     /**
@@ -217,12 +301,10 @@ class ConfigProvider
      *
      * @param int $exp
      * @return void
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function saveAccessTokenExpiresAt(int $exp): void
     {
-        $this->saveShippingConfig(self::ACCESS_TOKEN_EXPIRES_AT, $exp);
+        $this->flagManager->saveFlag(self::ACCESS_TOKEN_EXPIRES_AT, $exp);
     }
 
     /**
@@ -239,21 +321,36 @@ class ConfigProvider
     }
 
     /**
+     * Check if shipping method is InPost International
+     *
+     * @param string $shippingMethod
+     * @return bool
+     */
+    public function isInpostShippingMethod(string $shippingMethod): bool
+    {
+        // @TODO Not really like it
+        return str_contains($shippingMethod, array_key_first($this->inpostCourier->getAllowedMethods()));
+    }
+
+    /**
      * Get config
      *
      * @param string $path
      * @return mixed
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     private function doGetShippingConfig(string $path): mixed
     {
-        list($scope, $scopeId) = $this->getCurrentScope();
-        return $this->scopeConfig->getValue(
-            self::SHIPPING_CONFIG_PATH . $path,
-            $scope,
-            $scopeId
-        );
+        try {
+            list($scope, $scopeId) = $this->getCurrentScope();
+            return $this->scopeConfig->getValue(
+                self::SHIPPING_CONFIG_PATH . $path,
+                $scope,
+                $scopeId
+            );
+        } catch (NoSuchEntityException|LocalizedException $e) {
+            $this->logger->error($e->getMessage());
+            return null;
+        }
     }
 
     /**
@@ -261,17 +358,20 @@ class ConfigProvider
      *
      * @param string $path
      * @return mixed
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     private function doGetCarriersConfig(string $path): mixed
     {
-        list($scope, $scopeId) = $this->getCurrentScope();
-        return $this->scopeConfig->getValue(
-            self::CARRIERS_CONFIG_PATH . $path,
-            $scope,
-            $scopeId
-        );
+        try {
+            list($scope, $scopeId) = $this->getCurrentScope();
+            return $this->scopeConfig->getValue(
+                self::CARRIERS_CONFIG_PATH . $path,
+                $scope,
+                $scopeId
+            );
+        } catch (NoSuchEntityException|LocalizedException $e) {
+            $this->logger->error($e->getMessage());
+            return null;
+        }
     }
 
     /**

@@ -1,6 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smartcore\InPostInternational\Model\Api;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\Serialize\Serializer\Json;
 use Smartcore\InPostInternational\Model\ConfigProvider;
@@ -30,6 +35,8 @@ class WellKnownService
      * Get well-known configuration
      *
      * @return array|null
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getConfiguration(): ?array
     {
@@ -43,6 +50,8 @@ class WellKnownService
      * Fetch configuration from well-known endpoint
      *
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     private function fetchConfiguration(): void
     {

@@ -15,7 +15,7 @@ class ParcelWeightUnit implements OptionSourceInterface
     public function toOptionArray() : array
     {
         return [
-            ['value' => 'kg', 'label' => __('Kilograms')]
+            ['value' => 'KG', 'label' => __('Kilograms')]
         ];
     }
 }
