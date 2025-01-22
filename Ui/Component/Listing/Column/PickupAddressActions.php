@@ -52,7 +52,7 @@ class PickupAddressActions extends Column
                             'inpostinternational/pickupaddress/edit',
                             ['id' => $item['entity_id']]
                         ),
-                        'label' => __('Edit')
+                        'hidden' => true
                     ],
                     'delete' => [
                         'href' => $this->urlBuilder->getUrl(

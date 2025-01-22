@@ -10,7 +10,7 @@ use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderRepository;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Smartcore\InPostInternational\Model\Shipment;
+use Smartcore\InPostInternational\Model\InPostShipment;
 
 abstract class AbstractOrderObserver
 {
@@ -31,14 +31,17 @@ abstract class AbstractOrderObserver
     /**
      * Get order from observer
      *
-     * @param Shipment $inpostShipment
-     * @return Order
+     * @param InPostShipment $inpostShipment
+     * @return Order|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    protected function getOrder(Shipment $inpostShipment): Order
+    protected function getOrder(InPostShipment $inpostShipment): ?Order
     {
         $orderId = $inpostShipment->getOrderId();
+        if (!$orderId) {
+            return null;
+        }
         try {
             /** @var Order $order */
             $order = $this->orderRepository->get($orderId);

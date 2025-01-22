@@ -12,13 +12,12 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Smartcore\InPostInternational\Exception\LabelException;
 use Smartcore\InPostInternational\Model\Api\InternationalApiService;
-use Smartcore\InPostInternational\Model\ResourceModel\Shipment\CollectionFactory as ShipmentCollectionFactory;
-use Smartcore\InPostInternational\Model\ShipmentRepository;
+use Smartcore\InPostInternational\Model\InPostShipmentRepository;
+use Smartcore\InPostInternational\Model\ResourceModel\InPostShipment\CollectionFactory as ShipmentCollectionFactory;
 use Smartcore\InPostInternational\Service\FileService;
 
 /**
@@ -32,24 +31,22 @@ abstract class MassGetInPostLabels extends Action
      *
      * @param Context $context
      * @param Filter $filter
-     * @param ShipmentRepository $shipmentRepository
+     * @param InPostShipmentRepository $shipmentRepository
      * @param FileFactory $fileFactory
      * @param FileService $fileService
      * @param InternationalApiService $apiService
      * @param CollectionFactory $orderCollFactory
      * @param ShipmentCollectionFactory $shipmentCollFactory
-     * @param OrderRepository $orderRepository
      */
     public function __construct(
         Context                                      $context,
         protected readonly Filter                    $filter,
-        protected readonly ShipmentRepository        $shipmentRepository,
+        protected readonly InPostShipmentRepository  $shipmentRepository,
         protected readonly FileFactory               $fileFactory,
         protected readonly FileService               $fileService,
         protected readonly InternationalApiService   $apiService,
         protected readonly CollectionFactory         $orderCollFactory,
         protected readonly ShipmentCollectionFactory $shipmentCollFactory,
-        private readonly OrderRepository             $orderRepository,
     ) {
         parent::__construct($context);
     }
@@ -99,8 +96,7 @@ abstract class MassGetInPostLabels extends Action
             }
 
             $content = $this->apiService->getLabel($shipment);
-            $order = $this->orderRepository->get($shipment->getOrderId());
-            $fileName = $this->fileService->getLabelFilename($order->getIncrementId(), (string) $shipment->getId());
+            $fileName = $this->fileService->getLabelFilename($shipment);
             $labels[$fileName] = $content;
         }
 
