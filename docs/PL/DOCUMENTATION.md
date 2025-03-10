@@ -60,8 +60,10 @@ bin/magento setup:static-content:deploy
 2. Instalacja przez archiwum ZIP:
 - Pobierz archiwum
 - Rozpakuj archiwum do katalogu `app/code/Smartcore/InPostInternational`
+- Katalogi Api, Block, Controller itd. powinny znajdować się bezpośrednio w `app/code/Smartcore/InPostInternational`
 - Wykonaj polecenia:
-```bash 
+```bash
+bin/magento module:enable Smartcore_InPostInternational
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 bin/magento setup:static-content:deploy
