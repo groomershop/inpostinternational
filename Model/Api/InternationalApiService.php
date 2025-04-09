@@ -28,6 +28,7 @@ class InternationalApiService
     public const API_SANDBOX_BASE_URL = 'https://sandbox-api.inpost-group.com/';
     private const API_VERSION = '2024-06-01';
     private const API_PLUGIN_HEADER = 'InPost_Magento_International';
+    private const API_ORIGIN_HEADER = 'Magento_INT';
 
     /**
      * @var string
@@ -76,10 +77,15 @@ class InternationalApiService
     public function createApiShipment(ShipmentTypeInterface $shipment): array
     {
         $shipmentData = $shipment->toArray();
+        $headers = [
+            'X-Origin-Metadata' => self::API_ORIGIN_HEADER,
+        ];
+
         return $this->sendRequest(
             'POST',
             sprintf('shipments/%s', $shipment->getEndpoint()),
-            $shipmentData
+            $shipmentData,
+            $headers
         );
     }
 
@@ -167,12 +173,13 @@ class InternationalApiService
      * @param string $method
      * @param string $endpoint
      * @param array<mixed>|null $data
+     * @param array<mixed>|null $headers
      * @return array<mixed>
      * @throws ApiException
      * @throws LocalizedException
      * @throws TokenSaveException
      */
-    private function sendRequest(string $method, string $endpoint, ?array $data = null): array
+    private function sendRequest(string $method, string $endpoint, ?array $data = null, ?array $headers = null): array
     {
         $url = $this->buildUrl($endpoint);
 
@@ -181,6 +188,12 @@ class InternationalApiService
         $this->curl->addHeader('Accept', 'application/json');
         $this->curl->addHeader('X-InPost-Api-Version', self::API_VERSION);
         $this->curl->addHeader('X-Inpost-Plugin', self::API_PLUGIN_HEADER);
+
+        if ($headers) {
+            foreach ($headers as $key => $value) {
+                $this->curl->addHeader($key, $value);
+            }
+        }
 
         $serializedData = $data ? $this->json->serialize($data) : null;
 
