@@ -6,8 +6,6 @@ namespace Smartcore\InPostInternational\Controller\Adminhtml\WeightPrice;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Smartcore\InPostInternational\Model\WeightPriceFactory;
@@ -37,9 +35,9 @@ class Save extends Action
     /**
      * Save Weight-based price
      *
-     * @return ResponseInterface|Redirect|ResultInterface
+     * @return ResultInterface
      */
-    public function execute(): ResultInterface|ResponseInterface|Redirect
+    public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue('weightprice_fieldset');

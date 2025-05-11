@@ -6,7 +6,6 @@ namespace Smartcore\InPostInternational\Controller\Adminhtml\Shipment;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -43,10 +42,10 @@ class MassDelete extends Action
     /**
      * Execute action
      *
-     * @return ResultInterface|ResponseInterface|Redirect
+     * @return ResultInterface
      * @throws LocalizedException
      */
-    public function execute(): ResultInterface|ResponseInterface|Redirect
+    public function execute(): ResultInterface
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();
