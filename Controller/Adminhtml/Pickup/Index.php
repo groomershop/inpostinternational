@@ -6,9 +6,7 @@ namespace Smartcore\InPostInternational\Controller\Adminhtml\Pickup;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
 class Index extends Action
@@ -35,9 +33,9 @@ class Index extends Action
     /**
      * Pickup Template List
      *
-     * @return ResponseInterface|ResultInterface|Page
+     * @return ResultInterface
      */
-    public function execute(): Page|ResultInterface|ResponseInterface
+    public function execute(): ResultInterface
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__('InPost International Pickups')->render());
