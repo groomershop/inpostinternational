@@ -136,7 +136,15 @@ define([
         },
 
         loadSavedPoint: function() {
-            const serverSavedPoint = JSON.parse(window.checkoutConfig.inpostGeowidget.savedPoint);
+            let serverSavedPoint = null;
+
+            try {
+                if (window.checkoutConfig?.inpostGeowidget?.savedPoint) {
+                    serverSavedPoint = JSON.parse(window.checkoutConfig.inpostGeowidget.savedPoint);
+                }
+            } catch (e) {
+                console.warn('Failed to load InPost International point from configuration:', e);
+            }
 
             let localStoragePoint = null;
             try {
@@ -145,7 +153,7 @@ define([
                     localStoragePoint = JSON.parse(stored);
                 }
             } catch (e) {
-                console.warn('Failed to load point from localStorage:', e);
+                console.warn('Failed to load InPost International point from localStorage:', e);
             }
 
             const pointToUse = serverSavedPoint || localStoragePoint;
