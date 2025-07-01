@@ -47,7 +47,7 @@ class WeightPriceService
         if (!$weightTo) {
             $conditions = [
                 sprintf('(weight_to >= %f)', $weightFrom),
-                '(weight_to = NULL)',
+                '(weight_to is NULL)',
             ];
         }
 
