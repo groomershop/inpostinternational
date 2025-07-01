@@ -3,6 +3,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer name="inpostinternational.order.shipment.create"
               queue="inpostinternational.order.shipment.create"
-              connection="amqp"
+              connection="db"
               handler="Smartcore\InPostInternational\Model\Consumer::processMessage"/>
 </config>
