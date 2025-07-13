@@ -10,8 +10,8 @@ use Magento\Store\Model\ScopeInterface;
 
 class Logo
 {
-    private const XML_PATH_LOGO = 'carriers/inpostinternationalcourier/logo';
-    private const DEFAULT_LOGO = 'Smartcore_InPostInternational::images/inpostinternational_logo.png';
+    private const XML_PATH_LOGO = 'carriers/%s/logo';
+    private const XML_PATH_DEFAULT_LOGO = 'carriers/%s/default_logo';
 
     /**
      * Logo constructor.
@@ -28,24 +28,48 @@ class Logo
     }
 
     /**
-     * Get InPost logo URL
+     * Get carrier logo URL
      *
+     * @param string|null $carrierCode
      * @param int|null $storeId
      * @return string
      */
-    public function getLogoUrl(?int $storeId = null): string
+    public function getLogoUrl(string $carrierCode = null, ?int $storeId = null): string
     {
-        $logoPath = $this->scopeConfig->getValue(
-            self::XML_PATH_LOGO,
+        $logoPath = $this->getConfiguredLogoPath(self::XML_PATH_LOGO, $carrierCode, $storeId);
+        if ($logoPath) {
+            return $this->buildMediaUrl('inpostinternational/logo/' . $logoPath);
+        }
+
+        $defaultLogoPath = $this->getConfiguredLogoPath(self::XML_PATH_DEFAULT_LOGO, $carrierCode, $storeId);
+        return $this->assetRepository->getUrl($defaultLogoPath);
+    }
+
+    /**
+     * Get configured logo path from the scope configuration
+     *
+     * @param string $configPathTemplate
+     * @param string|null $carrierCode
+     * @param int|null $storeId
+     * @return string|null
+     */
+    private function getConfiguredLogoPath(string $configPathTemplate, ?string $carrierCode, ?int $storeId): ?string
+    {
+        return $this->scopeConfig->getValue(
+            sprintf($configPathTemplate, $carrierCode),
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
 
-        if ($logoPath) {
-            return $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA])
-                . 'inpostinternational/logo/' . $logoPath;
-        }
-
-        return $this->assetRepository->getUrl(self::DEFAULT_LOGO);
+    /**
+     * Build the full media URL for the given relative path
+     *
+     * @param string $relativePath
+     * @return string
+     */
+    private function buildMediaUrl(string $relativePath): string
+    {
+        return $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]) . ltrim($relativePath, '/');
     }
 }

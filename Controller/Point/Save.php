@@ -55,8 +55,23 @@ class Save extends Action implements HttpPostActionInterface
             $quote->setInpostinternationalLockerId($pointId);
 
             $pointData = $this->getRequest()->getParam('point_data');
+            $carrierCode = $this->getRequest()->getParam('carrier_code');
+
             if ($pointData) {
+                // Store the point data in the general field for backward compatibility
                 $quote->setInpostinternationalLockerData($pointData);
+
+                if ($carrierCode) {
+                    $carrierSpecificData = [];
+                    $existingData = $quote->getData('inpostinternational_carrier_points');
+
+                    if ($existingData) {
+                        $carrierSpecificData = json_decode($existingData, true) ?: [];
+                    }
+
+                    $carrierSpecificData[$carrierCode] = $pointData;
+                    $quote->setData('inpostinternational_carrier_points', json_encode($carrierSpecificData));
+                }
             }
 
             $this->quoteRepository->save($quote);

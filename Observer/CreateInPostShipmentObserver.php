@@ -41,7 +41,7 @@ class CreateInPostShipmentObserver implements ObserverInterface
 
         $order = $observer->getEvent()->getOrder();
 
-        if (!$this->configProvider->isInpostShippingMethod($order->getShippingMethod())) {
+        if (!$this->configProvider->isSupportedShippingMethod($order->getShippingMethod())) {
             return;
         }
 

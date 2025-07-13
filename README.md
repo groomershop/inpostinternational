@@ -18,7 +18,7 @@ Official InPost International integration module for Magento 2. The module allow
 
 ## Requirements
 - Magento 2.4.x
-- PHP >= 8.1
+- PHP >= 8.1 < 8.3
 - InPost International API credentials
 - Geowidget token
 

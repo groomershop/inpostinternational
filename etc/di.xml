@@ -26,4 +26,13 @@
         </arguments>
     </type>
 
+    <type name="Smartcore\InPostInternational\Model\ConfigProvider">
+        <arguments>
+            <argument name="couriers" xsi:type="array">
+                <item name="inpostcourier" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\InpostCourier</item>
+                <item name="mondialrelaycourier" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\MondialRelayCourier</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>

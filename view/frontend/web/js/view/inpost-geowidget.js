@@ -136,33 +136,41 @@ define([
         },
 
         loadSavedPoint: function() {
+            const method = quote.shippingMethod();
+            const carrierCode = method ? method.carrier_code : null;
+
             let serverSavedPoint = null;
+            let specificServerSavedPoint = null;
 
             try {
-                if (window.checkoutConfig?.inpostGeowidget?.savedPoint) {
-                    serverSavedPoint = JSON.parse(window.checkoutConfig.inpostGeowidget.savedPoint);
+                if (carrierCode && window.checkoutConfig?.inpostGeowidget?.['savedPoint_' + carrierCode]) {
+                    specificServerSavedPoint = JSON.parse(window.checkoutConfig.inpostGeowidget['savedPoint_' + carrierCode]);
                 }
             } catch (e) {
                 console.warn('Failed to load InPost International point from configuration:', e);
             }
 
             let localStoragePoint = null;
+            let specificLocalStoragePoint = null;
+
             try {
-                const stored = localStorage.getItem('inpostinternational_locker_id');
-                if (stored) {
-                    localStoragePoint = JSON.parse(stored);
+                if (carrierCode) {
+                    const storedSpecific = localStorage.getItem('inpostinternational_locker_id_' + carrierCode);
+                    if (storedSpecific) {
+                        specificLocalStoragePoint = JSON.parse(storedSpecific);
+                    }
                 }
             } catch (e) {
                 console.warn('Failed to load InPost International point from localStorage:', e);
             }
 
-            const pointToUse = serverSavedPoint || localStoragePoint;
+            const pointToUse = specificServerSavedPoint || specificLocalStoragePoint || serverSavedPoint || localStoragePoint;
 
             if (pointToUse) {
                 this.selectedPoint(pointToUse);
                 this.updateInpostinternationalInputField(pointToUse);
 
-                if (localStoragePoint && !serverSavedPoint) {
+                if ((specificLocalStoragePoint || localStoragePoint) && !specificServerSavedPoint && !serverSavedPoint) {
                     this.savePoint(pointToUse);
                 }
             }
@@ -182,8 +190,15 @@ define([
 
         savePoint: function(point) {
             let pointData = JSON.stringify(point);
+            const method = quote.shippingMethod();
+            const carrierCode = method ? method.carrier_code : null;
 
+            // Always save to the general storage for backward compatibility
             localStorage.setItem('inpostinternational_locker_id', pointData);
+
+            if (carrierCode) {
+                localStorage.setItem('inpostinternational_locker_id_' + carrierCode, pointData);
+            }
 
             return $.ajax({
                 url: window.checkoutConfig.inpostGeowidget.savePointUrl,
@@ -191,6 +206,7 @@ define([
                 data: {
                     point_data: pointData,
                     point_id: point.name,
+                    carrier_code: carrierCode
                 },
                 dataType: 'json'
             }).fail(function(jqXHR, textStatus, errorThrown) {

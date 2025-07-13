@@ -7,13 +7,13 @@ namespace Smartcore\InPostInternational\Model\Carrier;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InpostCourier extends AbstractInternationalCourier
+class MondialRelayCourier extends AbstractInternationalCourier
 {
 
     /**
      * @var string
      */
-    protected $_code = 'inpostinternationalcourier';
+    protected $_code = 'mondialrelaycourier';
 
     /**
      * @var string
@@ -23,5 +23,5 @@ class InpostCourier extends AbstractInternationalCourier
     /**
      * @var array<string>
      */
-    protected array $countryAllowed = ['IT', 'ES', 'PT'];
+    protected array $countryAllowed = ['NL', 'FR', 'BE', 'LU'];
 }
