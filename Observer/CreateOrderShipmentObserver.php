@@ -133,8 +133,8 @@ class CreateOrderShipmentObserver extends AbstractOrderObserver implements Obser
      */
     private function createTrack(Shipment $orderShipment, InpostShipment $inpostShipment): void
     {
-        $trackTitle = $this->configProvider->getShippingMethodTitle();
-        $carrierCode = $this->inpostCourier->getCarrierCode();
+        $trackTitle = $this->configProvider->getShippingMethodTitle($orderShipment->getOrder()->getShippingMethod());
+        $carrierCode = explode('_', $orderShipment->getOrder()->getShippingMethod())[0] ?? '';
         $data = [
             'carrier_code' => $carrierCode,
             'title' => $trackTitle,
