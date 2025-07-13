@@ -185,12 +185,13 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getShippingCountries(): string
     {
-        $allCountryLists = array_map(
-            fn ($courier) => $courier->getAllAllowedCountries(),
-            $this->couriers
-        );
+        $countries = [];
+        foreach ($this->couriers as $courier) {
+            foreach ((array) $courier->getAllAllowedCountries() as $country) {
+                $countries[] = $country;
+            }
+        }
 
-        $countries = array_merge(...$allCountryLists);
         return implode(',', array_unique($countries));
     }
 
