@@ -27,36 +27,36 @@
         <div class="carrier-title-wrapper">
             <!-- ko if: $parent.getTemplateForMethod(method) === 'Smartcore_InPostInternational/shipping-method-item' -->
             <img data-bind="attr: {
-                src: window.checkoutConfig.inpostGeowidget.logoUrl,
+                src: window.checkoutConfig.inpostGeowidget['logoUrl_' + method.carrier_code],
                 alt: method.carrier_title
             }" class="carrier-logo" />
             <!-- /ko -->
             <span data-bind="text: method.carrier_title"></span>
         </div>
         <!-- ko if: $parent.getTemplateForMethod(method) === 'Smartcore_InPostInternational/shipping-method-item' -->
-        <!-- ko if: $parent.getSelectedPoint() -->
+        <!-- ko with: $parent.getSelectedPoint(method.carrier_code) -->
         <div class="selected-point-details">
             <div class="point-name">
                 <strong data-bind="i18n: 'Pickup point:'"></strong>
-                <span data-bind="text: $parent.getSelectedPoint().name"></span>
+                <span data-bind="text: name"></span>
             </div>
             <div class="point-address">
-                <div data-bind="text: $parent.getSelectedPoint().address.line1"></div>
-                <div data-bind="text: $parent.getSelectedPoint().address.line2"></div>
+                <div data-bind="text: address.line1"></div>
+                <div data-bind="text: address.line2"></div>
             </div>
-            <!-- ko if: $parent.getSelectedPoint().opening_hours -->
+            <!-- ko if: opening_hours -->
             <div class="point-hours">
                 <span data-bind="i18n: 'Active:'"></span>
-                <span data-bind="text: $parent.getSelectedPoint().opening_hours"></span>
+                <span data-bind="text: opening_hours"></span>
             </div>
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <button type="button" class="action primary" data-bind="click: function() { $parent.showInpostWidget(); }">
-            <!-- ko if: !$parent.getSelectedPoint() -->
+            <!-- ko ifnot: $parent.getSelectedPoint(method.carrier_code) -->
             <span data-bind="i18n: 'Select pickup point'"></span>
             <!-- /ko -->
-            <!-- ko if: $parent.getSelectedPoint() -->
+            <!-- ko if: $parent.getSelectedPoint(method.carrier_code) -->
             <span data-bind="i18n: 'Change pickup point'"></span>
             <!-- /ko -->
         </button>

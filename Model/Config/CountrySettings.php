@@ -16,63 +16,72 @@ class CountrySettings
             'languageCode' => 'it_IT',
             'phonePrefix' => '+39',
             'currency' => 'EUR',
-            'canShipTo' => true,
+            'canInPostShipTo' => true,
+            'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
         'FR' => [
             'languageCode' => 'fr_FR',
             'phonePrefix' => '+33',
             'currency' => 'EUR',
-            'canShipTo' => true,
+            'canInPostShipTo' => false,
+            'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
         'LU' => [
             'languageCode' => 'fr_LU',
             'phonePrefix' => '+352',
             'currency' => 'EUR',
-            'canShipTo' => true,
+            'canInPostShipTo' => false,
+            'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
         'BE' => [
             'languageCode' => 'nl_BE',
             'phonePrefix' => '+32',
             'currency' => 'EUR',
-            'canShipTo' => true,
+            'canInPostShipTo' => false,
+            'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
         'NL' => [
             'languageCode' => 'nl_NL',
             'phonePrefix' => '+31',
             'currency' => 'EUR',
-            'canShipTo' => true,
+            'canInPostShipTo' => false,
+            'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
         'ES' => [
             'languageCode' => 'es_ES',
             'phonePrefix' => '+34',
             'currency' => 'EUR',
-            'canShipTo' => true,
+            'canInPostShipTo' => true,
+            'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
         'PT' => [
             'languageCode' => 'pt_PT',
             'phonePrefix' => '+351',
             'currency' => 'EUR',
-            'canShipTo' => true,
+            'canInPostShipTo' => true,
+            'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
         'PL' => [
             'languageCode' => 'pl_PL',
             'phonePrefix' => '+48',
             'currency' => 'PLN',
-            'canShipTo' => false,
+            'canInPostShipTo' => false,
+            'canMondialRelayShipTo' => false,
             'canShipFrom' => true
         ],
         'GB' => [
             'languageCode' => 'en_GB',
             'phonePrefix' => '+44',
             'currency' => 'GBP',
-            'canShipTo' => false,
+            'canInPostShipTo' => false,
+            'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
     ];
@@ -98,13 +107,23 @@ class CountrySettings
     }
 
     /**
-     * Get countries that can be shipped to
+     * Get countries that can be shipped to by InPost
      *
      * @return array|array[]
      */
-    public function getCountryCanShipToSettings(): array
+    public function getCountryCanInPostShipToSettings(): array
     {
-        return array_filter($this->countrySettings, fn ($country) => $country['canShipTo']);
+        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipTo']);
+    }
+
+    /**
+     * Get countries that can be shipped to by Mondial Relay
+     *
+     * @return array|array[]
+     */
+    public function getCountryCanMondialRelayShipToSettings(): array
+    {
+        return array_filter($this->countrySettings, fn ($country) => $country['canMondialRelayShipTo']);
     }
 
     /**

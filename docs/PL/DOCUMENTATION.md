@@ -17,9 +17,9 @@
 13. [Dla developerów](#dla-developerów)
 ---
 ## Informacje ogólne
-Moduł InPost International umożliwia integrację sklepu Magento 2 z międzynarodowymi usługami kurierskimi InPost. 
-Główne funkcje:
-- Nowa metoda dostawy w procesie zamówienia
+Moduł InPost International umożliwia integrację sklepu Magento 2 z międzynarodowymi usługami kurierskimi InPost oraz 
+Mundial Relay. Główne funkcje:
+- Nowe metody dostawy w procesie zamówienia
 - Cena metody dostawy zależna od wagi koszyka
 - Integracja z geowidgetem (mapa punktów odbioru)
 - Automatyczne lub ręczne tworzenie przesyłek międzynarodowych

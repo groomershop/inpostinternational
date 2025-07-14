@@ -26,8 +26,20 @@
                 <weight_out_of_range>use_price</weight_out_of_range>
                 <position>1</position>
                 <sallowspecific>1</sallowspecific>
-                <specificcountry>BE,ES,FR,IT,LU,NL,PT</specificcountry>
+                <specificcountry>ES,IT,PT</specificcountry>
+                <default_logo>Smartcore_InPostInternational::images/inpostinternational_logo.png</default_logo>
             </inpostinternationalcourier>
+            <mondialrelaycourier>
+                <model>Smartcore\InPostInternational\Model\Carrier\MondialRelayCourier</model>
+                <active>0</active>
+                <title>Mondial Relay</title>
+                <name>Mondial Relay International</name>
+                <weight_out_of_range>use_price</weight_out_of_range>
+                <position>1</position>
+                <sallowspecific>1</sallowspecific>
+                <specificcountry>BE,FR,LU,NL</specificcountry>
+                <default_logo>Smartcore_InPostInternational::images/mondialrelay_logo.png</default_logo>
+            </mondialrelaycourier>
         </carriers>
     </default>
 </config>

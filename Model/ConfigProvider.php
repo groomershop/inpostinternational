@@ -17,17 +17,17 @@ use Magento\Framework\FlagManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use Smartcore\InPostInternational\Model\Carrier\InpostCourier;
 use Smartcore\InPostInternational\Model\Config\Source\Mode;
 use Smartcore\InPostInternational\Service\Logo;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ConfigProvider implements ConfigProviderInterface
 {
     public const SHIPPING_CONFIG_PATH = 'shipping/inpostinternational/';
-    public const CARRIERS_CONFIG_PATH = 'carriers/inpostinternationalcourier/';
+    public const CARRIERS_CONFIG_PATH = 'carriers/';
     private const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
     private const ACCESS_TOKEN = 'access_token';
     private const REFRESH_TOKEN = 'refresh_token';
@@ -44,10 +44,10 @@ class ConfigProvider implements ConfigProviderInterface
      * @param FlagManager $flagManager
      * @param RequestInterface $request
      * @param LoggerInterface $logger
-     * @param InpostCourier $inpostCourier
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param CheckoutSession $checkoutSession
      * @param Logo $logo
+     * @param array<mixed> $couriers
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -59,10 +59,10 @@ class ConfigProvider implements ConfigProviderInterface
         private readonly FlagManager                     $flagManager,
         private readonly RequestInterface                $request,
         private readonly LoggerInterface                 $logger,
-        private readonly InpostCourier                   $inpostCourier,
         private readonly \Magento\Framework\UrlInterface $urlBuilder,
         private CheckoutSession                          $checkoutSession,
-        private readonly Logo                            $logo
+        private readonly Logo                            $logo,
+        private readonly array                           $couriers = []
     ) {
     }
 
@@ -179,19 +179,40 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get configured shipping countries
+     * Get configured shipping countries for all carriers
+     *
+     * @return string
      */
-    public function getShippingCountries()
+    public function getShippingCountries(): string
     {
-        return $this->doGetCarriersConfig('specificcountry');
+        $countries = [];
+        foreach ($this->couriers as $courier) {
+            foreach ((array) $courier->getAllAllowedCountries() as $country) {
+                $countries[] = $country;
+            }
+        }
+
+        return implode(',', array_unique($countries));
     }
 
     /**
      * Get shipping method title
+     *
+     * @param string $shippingMethod
+     * @return string
      */
-    public function getShippingMethodTitle()
+    public function getShippingMethodTitle(string $shippingMethod): string
     {
-        return $this->doGetCarriersConfig('title');
+        // Get the carrier code from the shipping method
+        $carrierCode = explode('_', $shippingMethod)[0];
+        // Find the corresponding courier
+        foreach ($this->couriers as $courier) {
+            if ($courier->getCarrierCode() === $carrierCode) {
+                return $this->doGetCarriersConfig($carrierCode . '/title');
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -336,14 +357,19 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Check if shipping method is InPost International
+     * Check if the shipping method is supported
      *
      * @param string $shippingMethod
      * @return bool
      */
-    public function isInpostShippingMethod(string $shippingMethod): bool
+    public function isSupportedShippingMethod(string $shippingMethod): bool
     {
-        return str_contains($shippingMethod, array_key_first($this->inpostCourier->getAllowedMethods()));
+        foreach ($this->couriers as $courier) {
+            if (str_contains($shippingMethod, array_key_first($courier->getAllowedMethods()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -446,20 +472,37 @@ class ConfigProvider implements ConfigProviderInterface
     {
         $quote = $this->checkoutSession->getQuote();
         $pointId = null;
+        $carrierPoints = [];
 
         if ($quote->getId()) {
             $pointId = $quote->getData('inpostinternational_locker_data');
+            $carrierPointsData = $quote->getData('inpostinternational_carrier_points');
+
+            if ($carrierPointsData) {
+                $carrierPoints = json_decode($carrierPointsData, true) ?: [];
+            }
         }
-        return [
-            'inpostGeowidget' => [
-                'token' => $this->getGeowidgetToken(),
-                'isSandbox' => $this->getMode() === Mode::SANDBOX,
-                'shippingMethods' => implode(',', array_keys($this->inpostCourier->getAllowedMethods())),
-                'savePointUrl' => $this->urlBuilder->getUrl('inpostinternational/point/save'),
-                'savedPoint' => $pointId,
-                'logoUrl' => $this->logo->getLogoUrl(),
-                'geowidgetCountries' => $this->getShippingCountries(),
-            ]
+
+        $shippingMethods = [];
+        foreach ($this->couriers as $courier) {
+            $shippingMethods[] = $courier->getCarrierCode();
+        }
+
+        $result = [
+            'token' => $this->getGeowidgetToken(),
+            'isSandbox' => $this->getMode() === Mode::SANDBOX,
+            'shippingMethods' => implode(',', $shippingMethods),
+            'savePointUrl' => $this->urlBuilder->getUrl('inpostinternational/point/save'),
+            'savedPoint' => $pointId, // Backward compatibility, use 'savedPoint_<shippingMethod>' instead
+            'geowidgetCountries' => $this->getShippingCountries(),
         ];
+
+        foreach ($shippingMethods as $shippingMethod) {
+            $result['logoUrl_' . $shippingMethod] = $this->logo->getLogoUrl($shippingMethod);
+            $carrierSpecificPoint = $carrierPoints[$shippingMethod] ?? null;
+            $result['savedPoint_' . $shippingMethod] = $carrierSpecificPoint ?: $pointId;
+        }
+
+        return ['inpostGeowidget' => $result];
     }
 }

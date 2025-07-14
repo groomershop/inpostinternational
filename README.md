@@ -18,7 +18,7 @@ Official InPost International integration module for Magento 2. The module allow
 
 ## Requirements
 - Magento 2.4.x
-- PHP >= 8.1
+- PHP >= 8.1 < 8.3
 - InPost International API credentials
 - Geowidget token
 
@@ -49,7 +49,7 @@ Basic configuration steps:
 3. Set up API credentials for desired environment (Sandbox/Production)
 4. Configure sender details and shipping preferences
 
-For detailed configuration instructions, please refer to the [documentation](docs/configuration.md).
+For detailed configuration instructions, please refer to the [documentation](docs/PL/DOCUMENTATION.md).
 
 ## Support
 If you encounter any issues or need assistance:
@@ -64,7 +64,7 @@ If you discover any security related issues, please contact the InPost Internati
 - Developed by Smartcore for InPost
 
 ## Release Notes
-See [CHANGELOG.md](changelog.md) for all version changes.
+See [CHANGELOG.md](docs/CHANGELOG.md) for all version changes.
 
 ## Additional Resources
 - [InPost International API Documentation](https://developers.inpost-group.com/)
