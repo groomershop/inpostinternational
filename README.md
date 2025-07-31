@@ -51,6 +51,12 @@ Basic configuration steps:
 
 For detailed configuration instructions, please refer to the [documentation](docs/PL/DOCUMENTATION.md).
 
+## Hyva checkout compatibility
+To make it work with Hyva Checkout You need to install second module: smartcore/inpostinternationalhyva 
+(available on [GitHub](https://github.com/InPost-Magento/smartcore_inpostinternationalhyva) 
+and [Packagist](https://packagist.org/packages/smartcore/inpostinternationalhyva)). 
+Please remember to enable backend validation in module configuration.
+
 ## Support
 If you encounter any issues or need assistance:
 - Check the detailed documentation in the `docs` folder
