@@ -309,6 +309,16 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
+     * Get auto order shipment create setting
+     *
+     * @return bool
+     */
+    public function isEnabledBackendValidation(): bool
+    {
+        return (bool) $this->doGetShippingConfig('backend_locker_validation');
+    }
+
+    /**
      * Save code verifier
      *
      * @param string $codeVerifier
