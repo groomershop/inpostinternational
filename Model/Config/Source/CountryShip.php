@@ -32,6 +32,9 @@ class CountryShip
 
         $options = [];
         foreach (array_keys($allCountries) as $countryKey) {
+            if (!$countryCollection->getItemByColumnValue('country_id', $countryKey)) {
+                continue;
+            }
             $options[] = [
                 'value' => $countryKey,
                 'label' => $countryCollection->getItemByColumnValue('country_id', $countryKey)->getName()

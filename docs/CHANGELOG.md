@@ -1,10 +1,16 @@
 # Changelog for Smartcore InPost International
 All notable changes to this project will be documented in this file.
 
+## 1.2.0 - 2025-07-31
+### Added
+- Backend validation for locker
+### Fixed
+- Fix for allowed countries in configuration
+
 ## 1.1.0 - 2025-07-13
 ### Added
 - Mondial Relay shipping method
-- 
+
 ## 1.0.16 - 2025-02-20
 ### Added
 - Field dependency on InPost shipment creation
