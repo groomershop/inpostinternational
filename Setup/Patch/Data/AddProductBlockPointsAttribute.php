@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
  */
 class AddProductBlockPointsAttribute implements DataPatchInterface, PatchRevertableInterface
 {
-    protected const ATTRIBUTE_CODE = 'block_inpostinternational_points';
+    public const ATTRIBUTE_CODE = 'block_inpostinternational_points';
     protected const GROUP_NAME = 'General';
     protected const SORT_ORDER = 33766;
 

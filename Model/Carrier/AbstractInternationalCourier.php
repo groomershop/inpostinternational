@@ -157,7 +157,7 @@ class AbstractInternationalCourier extends AbstractCarrier implements CarrierInt
         foreach ($items as $item) {
             $blockShip = $this->productResource->getAttributeRawValue(
                 $item->getProduct()->getId(),
-                AddProductBlockPointsAttribute::BLOCK_INPOSTINTERNATIONAL_POINTS,
+                AddProductBlockPointsAttribute::ATTRIBUTE_CODE,
                 $storeId
             );
 
