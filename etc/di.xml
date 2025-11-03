@@ -33,6 +33,7 @@
             <argument name="couriers" xsi:type="array">
                 <item name="inpostcourier" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\InpostCourier</item>
                 <item name="mondialrelaycourier" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\MondialRelayCourier</item>
+                <item name="inpostinternationald2d" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\InPostInternationalD2D</item>
             </argument>
         </arguments>
     </type>

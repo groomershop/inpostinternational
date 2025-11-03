@@ -21,7 +21,6 @@ use Psr\Log\LoggerInterface;
 use Smartcore\InPostInternational\Model\Config\Source\PriceCalculationType;
 use Smartcore\InPostInternational\Model\Config\Source\WeightOutOfRange;
 use Smartcore\InPostInternational\Model\ResourceModel\WeightPrice\CollectionFactory as WeightPriceCollectionFactory;
-use Smartcore\InPostInternational\Setup\Patch\Data\AddProductBlockPointsAttribute;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -41,6 +40,20 @@ class AbstractInternationalCourier extends AbstractCarrier implements CarrierInt
      * @var string
      */
     protected string $_method = '';
+
+    /**
+     * Product attribute to block shipping
+     *
+     * @var string|null
+     */
+    protected ?string $blockAttribute = null;
+
+    /**
+     * Destination type (point or address)
+     *
+     * @var string
+     */
+    protected string $destinationType;
 
     /**
      * List of allowed countries for shipping
@@ -153,16 +166,18 @@ class AbstractInternationalCourier extends AbstractCarrier implements CarrierInt
 
         $storeId = $this->storeManager->getStore()->getId();
 
-        /** @var Item $item */
-        foreach ($items as $item) {
-            $blockShip = $this->productResource->getAttributeRawValue(
-                $item->getProduct()->getId(),
-                AddProductBlockPointsAttribute::ATTRIBUTE_CODE,
-                $storeId
-            );
+        if ($this->blockAttribute) {
+            /** @var Item $item */
+            foreach ($items as $item) {
+                $blockShip = $this->productResource->getAttributeRawValue(
+                    $item->getProduct()->getId(),
+                    $this->blockAttribute,
+                    $storeId
+                );
 
-            if ($blockShip) {
-                return false;
+                if ($blockShip) {
+                    return false;
+                }
             }
         }
 
@@ -283,5 +298,15 @@ class AbstractInternationalCourier extends AbstractCarrier implements CarrierInt
     public function getAllAllowedCountries(): array
     {
         return $this->countryAllowed;
+    }
+
+    /**
+     * Get destination type
+     *
+     * @return string
+     */
+    public function getDestinationType(): string
+    {
+        return $this->destinationType;
     }
 }

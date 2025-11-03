@@ -16,7 +16,8 @@ class CountrySettings
             'languageCode' => 'it_IT',
             'phonePrefix' => '+39',
             'currency' => 'EUR',
-            'canInPostShipTo' => true,
+            'canInPostShipToPoint' => true,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
@@ -24,7 +25,8 @@ class CountrySettings
             'languageCode' => 'fr_FR',
             'phonePrefix' => '+33',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipToPoint' => false,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
@@ -32,7 +34,8 @@ class CountrySettings
             'languageCode' => 'fr_LU',
             'phonePrefix' => '+352',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipToPoint' => false,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
@@ -40,7 +43,8 @@ class CountrySettings
             'languageCode' => 'nl_BE',
             'phonePrefix' => '+32',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipToPoint' => false,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
@@ -48,7 +52,8 @@ class CountrySettings
             'languageCode' => 'nl_NL',
             'phonePrefix' => '+31',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipToPoint' => false,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => true,
             'canShipFrom' => false
         ],
@@ -56,7 +61,8 @@ class CountrySettings
             'languageCode' => 'es_ES',
             'phonePrefix' => '+34',
             'currency' => 'EUR',
-            'canInPostShipTo' => true,
+            'canInPostShipToPoint' => true,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
@@ -64,7 +70,8 @@ class CountrySettings
             'languageCode' => 'pt_PT',
             'phonePrefix' => '+351',
             'currency' => 'EUR',
-            'canInPostShipTo' => true,
+            'canInPostShipToPoint' => true,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
@@ -72,7 +79,8 @@ class CountrySettings
             'languageCode' => 'pl_PL',
             'phonePrefix' => '+48',
             'currency' => 'PLN',
-            'canInPostShipTo' => false,
+            'canInPostShipToPoint' => false,
+            'canInPostShipToAddress' => false,
             'canMondialRelayShipTo' => false,
             'canShipFrom' => true
         ],
@@ -80,7 +88,26 @@ class CountrySettings
             'languageCode' => 'en_GB',
             'phonePrefix' => '+44',
             'currency' => 'GBP',
-            'canInPostShipTo' => false,
+            'canInPostShipToPoint' => false,
+            'canInPostShipToAddress' => false,
+            'canMondialRelayShipTo' => false,
+            'canShipFrom' => false
+        ],
+        'AT' => [
+            'languageCode' => 'de_AT',
+            'phonePrefix' => '+43',
+            'currency' => 'EUR',
+            'canInPostShipToPoint' => true,
+            'canInPostShipToAddress' => true,
+            'canMondialRelayShipTo' => false,
+            'canShipFrom' => false
+        ],
+        'HU' => [
+            'languageCode' => 'hu_HU',
+            'phonePrefix' => '+36',
+            'currency' => 'HUF',
+            'canInPostShipToPoint' => false,
+            'canInPostShipToAddress' => true,
             'canMondialRelayShipTo' => false,
             'canShipFrom' => false
         ],
@@ -107,13 +134,23 @@ class CountrySettings
     }
 
     /**
-     * Get countries that can be shipped to by InPost
+     * Get countries that can be shipped to points by InPost
      *
      * @return array|array[]
      */
-    public function getCountryCanInPostShipToSettings(): array
+    public function getCountryCanInPostShipToPointSettings(): array
     {
-        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipTo']);
+        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipToPoint']);
+    }
+
+    /**
+     * Get countries that can be shipped to address by InPost
+     *
+     * @return array|array[]
+     */
+    public function getCountryCanInPostShipToAddressSettings(): array
+    {
+        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipToAddress']);
     }
 
     /**

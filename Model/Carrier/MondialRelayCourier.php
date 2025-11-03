@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Smartcore\InPostInternational\Model\Carrier;
 
+use Smartcore\InPostInternational\Setup\Patch\Data\AddProductBlockPointsAttribute;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -24,4 +26,14 @@ class MondialRelayCourier extends AbstractInternationalCourier
      * @var array<string>
      */
     protected array $countryAllowed = ['NL', 'FR', 'BE', 'LU'];
+
+    /**
+     * @var string|null
+     */
+    protected ?string $blockAttribute = AddProductBlockPointsAttribute::ATTRIBUTE_CODE;
+
+    /**
+     * @var string
+     */
+    public string $destinationType = 'point';
 }

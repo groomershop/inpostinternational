@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Smartcore\InPostInternational\Model\Config\CountrySettings;
 use Smartcore\InPostInternational\Model\ConfigProvider;
 
-class CountryShipToInPost extends CountryShip implements OptionSourceInterface
+class CountryShipToPointInPost extends CountryShip implements OptionSourceInterface
 {
     /**
      * Countries
@@ -31,7 +31,7 @@ class CountryShipToInPost extends CountryShip implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $allCountries = $this->countrySettings->getCountryCanInPostShipToSettings();
+        $allCountries = $this->countrySettings->getCountryCanInPostShipToPointSettings();
 
         return $this->getOptionsFromCountrySettings($allCountries);
     }

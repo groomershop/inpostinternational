@@ -19,6 +19,7 @@ use Smartcore\InPostInternational\Model\Config\Source\AutoInsurance;
 use Smartcore\InPostInternational\Model\Config\Source\Currency;
 use Smartcore\InPostInternational\Model\Config\Source\LabelFormat;
 use Smartcore\InPostInternational\Model\Config\Source\Priority;
+use Smartcore\InPostInternational\Model\Config\Source\ShippingMethods;
 use Smartcore\InPostInternational\Model\ConfigProvider;
 use Smartcore\InPostInternational\Model\ParcelTemplateRepository;
 use Smartcore\InPostInternational\Model\PickupAddressRepository;
@@ -53,6 +54,7 @@ class CreateDataProvider extends DataProvider
      * @param SessionManagerInterface $sessionManager
      * @param LabelFormat $labelFormat
      * @param Priority $priority
+     * @param ShippingMethods $shippingMethods
      * @param Currency $currency
      * @param OrderRepositoryInterface $orderRepository
      * @param array $meta
@@ -75,6 +77,7 @@ class CreateDataProvider extends DataProvider
         private SessionManagerInterface  $sessionManager,
         private LabelFormat              $labelFormat,
         private Priority                 $priority,
+        private ShippingMethods          $shippingMethods,
         private Currency                 $currency,
         private OrderRepositoryInterface $orderRepository,
         array                            $meta = [],
@@ -107,7 +110,6 @@ class CreateDataProvider extends DataProvider
         $insuranceValue = $this->getInsuranceValue();
         $defaultData = [
             ShipmentProcessor::SHIPMENT_FIELDSET => [
-                'shipment_type' => $this->configProvider->getShipmentType(),
                 'parcel_template' => $parcelTmplDefaultId,
                 'origin' => $pickupAddrDefaultId,
                 'insurance_value' => $insuranceValue,
@@ -120,6 +122,10 @@ class CreateDataProvider extends DataProvider
             $order = $this->orderRepository->get($orderId);
             if ($order->getId()) {
                 /** @var Order $order */
+                $shipmentType = $this->getDefaultShipmentType($order);
+                if ($shipmentType !== null) {
+                    $defaultData[ShipmentProcessor::SHIPMENT_FIELDSET]['shipment_type'] = $shipmentType;
+                }
                 $shippingAddress = $order->getShippingAddress();
                 $countryId = $shippingAddress->getCountryId();
                 $grandTotal = $this->priceCurrency->convertAndRound($order->getGrandTotal());
@@ -135,6 +141,11 @@ class CreateDataProvider extends DataProvider
                     'first_name' => $order->getCustomerFirstname(),
                     'last_name' => $order->getCustomerLastname(),
                     'company_name' => $shippingAddress->getCompany(),
+                    'street' => $shippingAddress->getStreetLine(1),
+                    'city' => $shippingAddress->getCity(),
+                    'postal_code' => $shippingAddress->getPostcode(),
+                    'house_number' => $shippingAddress->getStreetLine(2),
+                    'flat_number' => $shippingAddress->getStreetLine(3),
                     'email' => $order->getCustomerEmail(),
                     'phone_prefix' => $this->countrySettings->getPhonePrefix($countryId),
                     'phone_number' => $this->countrySettings->getPhoneNumberWithoutPrefixForCountry(
@@ -202,5 +213,22 @@ class CreateDataProvider extends DataProvider
             default => 0,
         };
         return (float) min($insuranceValue, $this->configProvider->getInsuranceMaxValue());
+    }
+
+    /**
+     * Get default shipment type based on order's shipping method
+     *
+     * @param Order $order
+     * @return string|null
+     */
+    private function getDefaultShipmentType(Order $order): ?string
+    {
+        $originType = $this->configProvider->getDefaultOriginType();
+        $shippingMethodCode = $order->getShippingMethod();
+        if ($this->configProvider->isSupportedShippingMethod($shippingMethodCode)) {
+            $destinationType = $this->shippingMethods->getShippingMethodDestinationType($shippingMethodCode);
+            return $originType . '-to-' . $destinationType;
+        }
+        return null;
     }
 }

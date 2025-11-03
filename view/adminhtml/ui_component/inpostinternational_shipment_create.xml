@@ -137,14 +137,128 @@
                                     <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.origin</target>
                                     <callback>show</callback>
                                 </action>
+                                <action name="1">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.point_name</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="2">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.street</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="3">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.city</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="4">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.postal_code</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="5">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.house_number</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="6">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.flat_number</target>
+                                    <callback>hide</callback>
+                                </action>
                             </actions>
                         </rule>
                         <rule name="1">
+                            <value>address-to-address</value>
+                            <actions>
+                                <action name="0">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.origin</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="1">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.point_name</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="2">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.street</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="3">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.city</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="4">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.postal_code</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="5">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.house_number</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="6">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.flat_number</target>
+                                    <callback>show</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="2">
                             <value>point-to-point</value>
                             <actions>
                                 <action name="0">
                                     <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.origin</target>
                                     <callback>hide</callback>
+                                </action>
+                                <action name="1">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.point_name</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="2">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.street</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="3">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.city</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="4">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.postal_code</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="5">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.house_number</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="6">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.flat_number</target>
+                                    <callback>hide</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="3">
+                            <value>point-to-address</value>
+                            <actions>
+                                <action name="0">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.origin</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="1">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.point_name</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="2">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.street</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="3">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.city</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="4">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.postal_code</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="5">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.house_number</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="6">
+                                    <target>inpostinternational_shipment_create.inpostinternational_shipment_create.shipment_fieldset.flat_number</target>
+                                    <callback>show</callback>
                                 </action>
                             </actions>
                         </rule>
@@ -308,6 +422,76 @@
                     <item name="dataScope" xsi:type="string">company_name</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="street">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Street</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">street</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="house_number">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">House number</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">house_number</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="flat_number">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Flat number</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">flat_number</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="postal_code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Postal code</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">postal_code</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="city">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">City</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">city</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                 </item>
             </argument>
