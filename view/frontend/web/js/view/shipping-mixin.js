@@ -26,10 +26,10 @@ define([
             onShippingMethodChange: function(method) {
                 if (!method) return;
 
-                const inpostMethods = window.checkoutConfig.inpostGeowidget?.shippingMethods || [];
-                const isInpostMethod = inpostMethods.includes(method.carrier_code);
+                const inpostGeowidgetMethods = window.checkoutConfig.inpostGeowidget?.geowidgetShippingMethods || [];
+                const isInpostGeowidgetMethod = inpostGeowidgetMethods.includes(method.carrier_code);
 
-                if (isInpostMethod && this.geowidget) {
+                if (isInpostGeowidgetMethod && this.geowidget) {
                     const selectedPoint = this.getSelectedPoint(method.carrier_code);
                     if (selectedPoint) {
                         this.geowidget.updateInpostinternationalInputField(selectedPoint);
@@ -48,9 +48,17 @@ define([
 
             getTemplateForMethod: function(method) {
                 const inpostMethods = window.checkoutConfig.inpostGeowidget?.shippingMethods || [];
-                return inpostMethods.includes(method.carrier_code)
-                    ? 'Smartcore_InPostInternational/shipping-method-item'
-                    : 'Magento_Checkout/shipping-address/shipping-method-item';
+                const geowidgetInpostMethods = window.checkoutConfig.inpostGeowidget?.geowidgetShippingMethods || [];
+
+                if(geowidgetInpostMethods.includes(method.carrier_code)) {
+                    return 'Smartcore_InPostInternational/shipping-method-item'
+                }
+
+                if(inpostMethods.includes(method.carrier_code)) {
+                    return 'Smartcore_InPostInternational/shipping-method-item-no-geowidget'
+                }
+
+                return 'Magento_Checkout/shipping-address/shipping-method-item';
             },
 
             showInpostWidget: function() {
@@ -83,9 +91,9 @@ define([
                 if (!originalResult) return false;
 
                 const method = quote.shippingMethod();
-                const inpostMethods = window.checkoutConfig.inpostGeowidget?.shippingMethods || [];
+                const inpostGeowidgetMethods = window.checkoutConfig.inpostGeowidget?.geowidgetShippingMethods || [];
 
-                if (method && inpostMethods.includes(method.carrier_code)) {
+                if (method && inpostGeowidgetMethods.includes(method.carrier_code)) {
                     let pointSelected = $('[name="inpostinternational_locker_id"]').val();
                     const selectedPoint = this.getSelectedPoint(method.carrier_code);
 

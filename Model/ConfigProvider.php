@@ -494,14 +494,19 @@ class ConfigProvider implements ConfigProviderInterface
         }
 
         $shippingMethods = [];
+        $geowidgetShipMethods = [];
         foreach ($this->couriers as $courier) {
             $shippingMethods[] = $courier->getCarrierCode();
+            if ($courier->getDestinationType() === 'point') {
+                $geowidgetShipMethods[] = $courier->getCarrierCode();
+            }
         }
 
         $result = [
             'token' => $this->getGeowidgetToken(),
             'isSandbox' => $this->getMode() === Mode::SANDBOX,
             'shippingMethods' => implode(',', $shippingMethods),
+            'geowidgetShippingMethods' => implode(',', $geowidgetShipMethods),
             'savePointUrl' => $this->urlBuilder->getUrl('inpostinternational/point/save'),
             'savedPoint' => $pointId, // Backward compatibility, use 'savedPoint_<shippingMethod>' instead
             'geowidgetCountries' => $this->getShippingCountries(),
