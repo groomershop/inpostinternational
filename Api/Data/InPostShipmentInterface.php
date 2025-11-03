@@ -33,6 +33,11 @@ interface InPostShipmentInterface
     public const ORIGIN_SHIPPING_METHODS = 'origin_shipping_methods';
     public const DESTINATION_COUNTRY_CODE = 'destination_country_code';
     public const DESTINATION_POINT_NAME = 'destination_point_name';
+    public const DESTINATION_POSTAL_CODE = 'destination_postal_code';
+    public const DESTINATION_CITY = 'destination_city';
+    public const DESTINATION_STREET = 'destination_street';
+    public const DESTINATION_FLAT_NUMBER = 'destination_flat_number';
+    public const DESTINATION_HOUSE_NUMBER = 'destination_house_number';
     public const PRIORITY = 'priority';
     public const INSURANCE_VALUE = 'insurance_value';
     public const INSURANCE_CURRENCY = 'insurance_currency';
@@ -427,10 +432,85 @@ interface InPostShipmentInterface
     /**
      * Set the destination point name
      *
-     * @param string $destinationPointName
+     * @param string|null $destPointName
      * @return self
      */
-    public function setDestinationPointName(string $destinationPointName): self;
+    public function setDestinationPointName(?string $destPointName): self;
+
+    /**
+     * Get the destination postal code
+     *
+     * @return string|null
+     */
+    public function getDestinationPostalCode(): ?string;
+
+    /**
+     * Set the destination postal code
+     *
+     * @param string|null $destPostalCode
+     * @return self
+     */
+    public function setDestinationPostalCode(?string $destPostalCode): self;
+
+    /**
+     * Get the destination city
+     *
+     * @return string|null
+     */
+    public function getDestinationCity(): ?string;
+
+    /**
+     * Set the destination city
+     *
+     * @param string|null $destCity
+     * @return self
+     */
+    public function setDestinationCity(?string $destCity): self;
+
+    /**
+     * Get the destination street
+     *
+     * @return string|null
+     */
+    public function getDestinationStreet(): ?string;
+
+    /**
+     * Set the destination street
+     *
+     * @param string|null $destStreet
+     * @return self
+     */
+    public function setDestinationStreet(?string $destStreet): self;
+
+    /**
+     * Get the destination house number
+     *
+     * @return string|null
+     */
+    public function getDestinationHouseNumber(): ?string;
+
+    /**
+     * Set the destination house number
+     *
+     * @param string|null $destHouseNumber
+     * @return self
+     */
+    public function setDestinationHouseNumber(?string $destHouseNumber): self;
+
+    /**
+     * Get the destination flat number
+     *
+     * @return string|null
+     */
+    public function getDestinationFlatNumber(): ?string;
+
+    /**
+     * Set the destination flat number
+     *
+     * @param string|null $destFlatNumber
+     * @return self
+     */
+    public function setDestinationFlatNumber(?string $destFlatNumber): self;
 
     /**
      * Get the priority level of the shipment

@@ -8,12 +8,19 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Smartcore\InPostInternational\Model\Data\Trait\InsuranceCreatorTrait;
+use Smartcore\InPostInternational\Model\Data\Trait\OriginAddressCreatorTrait;
 use Smartcore\InPostInternational\Model\InPostShipment as ShipmentModel;
 use Smartcore\InPostInternational\Model\InPostShipmentFactory;
 use Smartcore\InPostInternational\Model\PickupAddressRepository;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddressToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInterface
 {
+    use InsuranceCreatorTrait;
+    use OriginAddressCreatorTrait;
     public const ADDRESS_TO_POINT = 'address-to-point';
     public const LABEL = 'From address (courier pickup)';
 
@@ -89,21 +96,7 @@ class AddressToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
      */
     public function createOrigin(array $shipmentFieldsetData): OriginDto
     {
-        $pickupAddress = $this->pickupAddrRepository->load((int) $shipmentFieldsetData['origin']);
-
-        /** @var AddressDto $address */
-        $address = $this->abstractDtoBuilder->buildDtoInstance(AddressDto::class);
-        $address->setHouseNumber($pickupAddress->getAddressHouseNumber())
-            ->setFlatNumber($pickupAddress->getAddressFlatNumber())
-            ->setStreet($pickupAddress->getAddressStreet())
-            ->setCity($pickupAddress->getAddressCity())
-            ->setPostalCode($pickupAddress->getAddressPostalCode())
-            ->setCountryCode($pickupAddress->getAddressCountryCode());
-
-        /** @var OriginDto $origin */
-        $origin = $this->abstractDtoBuilder->buildDtoInstance(OriginDto::class);
-        $origin->setAddress($address);
-        return $origin;
+        return $this->createOriginAddress($shipmentFieldsetData);
     }
 
     /**
@@ -148,5 +141,33 @@ class AddressToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
     {
         $this->setData(self::SHIPMENT, $shipment);
         return $this;
+    }
+
+    /**
+     * Create destination object
+     *
+     * @param array<string,mixed> $shipmentFieldsetData
+     * @return DestinationInterface
+     */
+    public function createDestination(array $shipmentFieldsetData): DestinationInterface
+    {
+        /** @var DestinationInterface $destination */
+        $destination = $this->abstractDtoBuilder->buildDtoInstance(DestinationDto::class);
+        $destination
+            ->setCountryCode($shipmentFieldsetData['destination_country'])
+            ->setPointName($shipmentFieldsetData['point_name']);
+
+        return $destination;
+    }
+
+    /**
+     * Create value added services object
+     *
+     * @param array<string,mixed> $shipmentFieldsetData
+     * @return ValueAddedServicesDto|null
+     */
+    public function createValueAddedServices(array $shipmentFieldsetData): ?ValueAddedServicesDto
+    {
+        return $this->createValueAddedServicesWithInsurance($shipmentFieldsetData);
     }
 }

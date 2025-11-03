@@ -6,6 +6,7 @@ namespace Smartcore\InPostInternational\Model\Api;
 
 use Firebase\JWT\JWK;
 use Firebase\JWT\JWT;
+use Smartcore\InPostInternational\Model\ConfigProvider;
 use stdClass;
 
 class JwtService
@@ -15,10 +16,12 @@ class JwtService
      *
      * @param JWT $jwt
      * @param JWK $jwk
+     * @param ConfigProvider $configProvider
      */
     public function __construct(
         private readonly JWT $jwt,
-        private readonly JWK $jwk
+        private readonly JWK $jwk,
+        private readonly ConfigProvider   $configProvider,
     ) {
     }
 
@@ -31,6 +34,8 @@ class JwtService
      */
     public function decode(string $token, array $keySet): stdClass
     {
+        JWT::$leeway = $this->configProvider->getLeeway();
+
         return $this->jwt->decode($token, $keySet);
     }
 

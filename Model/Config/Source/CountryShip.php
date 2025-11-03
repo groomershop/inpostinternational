@@ -27,7 +27,7 @@ class CountryShip
     public function getOptionsFromCountrySettings(array $allCountries): array
     {
         $countryCollection = $this->countryCollFactory->create()
-            ->addFieldToFilter('country_id', ['in' => array_keys($allCountries)  ])
+            ->addFieldToFilter('country_id', ['in' => array_keys($allCountries)])
             ->load();
 
         $options = [];

@@ -9,22 +9,17 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Smartcore\InPostInternational\Model\ConfigProvider;
-use Smartcore\InPostInternational\Model\Data\Trait\InsuranceCreatorTrait;
+use Smartcore\InPostInternational\Model\Data\Trait\DestinationAddressCreatorTrait;
 use Smartcore\InPostInternational\Model\InPostShipment as ShipmentModel;
 use Smartcore\InPostInternational\Model\InPostShipmentFactory;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInterface
+class PointToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTypeInterface
 {
-    use InsuranceCreatorTrait;
-    public const POINT_TO_POINT = 'point-to-point';
-    public const LABEL = 'From point (Locker, Pick-up Drop-off Point, other)';
+    use DestinationAddressCreatorTrait;
+    public const POINT_TO_ADDRESS = 'point-to-address';
+    public const LABEL = 'From point to address (courier)';
 
     /**
-     * PointToPointShipmentDto constructor.
-     *
      * @param InPostShipmentFactory $shipmentFactory
      * @param AbstractDtoBuilder $abstractDtoBuilder
      * @param ConfigProvider $configProvider
@@ -35,12 +30,12 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      */
     public function __construct(
         readonly InPostShipmentFactory $shipmentFactory,
-        private readonly AbstractDtoBuilder       $abstractDtoBuilder,
-        private readonly ConfigProvider           $configProvider,
-        Context                  $context,
-        Registry                 $registry,
-        ?AbstractResource        $resource = null,
-        ?AbstractDb              $resourceCollection = null
+        private readonly AbstractDtoBuilder $abstractDtoBuilder,
+        private readonly ConfigProvider $configProvider,
+        Context $context,
+        Registry $registry,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null
     ) {
         parent::__construct($shipmentFactory, $context, $registry, $resource, $resourceCollection);
     }
@@ -52,7 +47,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      */
     public function getEndpoint(): string
     {
-        return self::POINT_TO_POINT;
+        return self::POINT_TO_ADDRESS;
     }
 
     /**
@@ -66,7 +61,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
     }
 
     /**
-     * Convert the DTO to a database model
+     * Convert shipment data to database model
      *
      * @return ShipmentModel
      */
@@ -86,7 +81,6 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      * Create origin object
      *
      * @param array<string,mixed> $shipmentFieldsetData
-     * @return OriginDto
      */
     public function createOrigin(array $shipmentFieldsetData): OriginDto
     {
@@ -99,7 +93,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
     }
 
     /**
-     * Get the label format for the shipment
+     * Get label format
      *
      * @return string
      */
@@ -109,7 +103,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
     }
 
     /**
-     * Set the label format for the shipment
+     * Set label format
      *
      * @param string $labelFormat
      * @return $this
@@ -121,7 +115,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
     }
 
     /**
-     * Get the shipment details for address-to-point delivery
+     * Get shipment data
      *
      * @return ShipmentDto
      */
@@ -131,7 +125,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
     }
 
     /**
-     * Set the shipment details for address-to-point delivery
+     * Set shipment data
      *
      * @param ShipmentDto $shipment
      * @return $this
@@ -146,17 +140,10 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      * Create destination object
      *
      * @param array<string,mixed> $shipmentFieldsetData
-     * @return DestinationInterface
      */
     public function createDestination(array $shipmentFieldsetData): DestinationInterface
     {
-        /** @var DestinationInterface $destination */
-        $destination = $this->abstractDtoBuilder->buildDtoInstance(DestinationDto::class);
-        $destination
-            ->setCountryCode($shipmentFieldsetData['destination_country'])
-            ->setPointName($shipmentFieldsetData['point_name']);
-
-        return $destination;
+        return $this->createDestinationAddress($shipmentFieldsetData);
     }
 
     /**
@@ -167,6 +154,6 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      */
     public function createValueAddedServices(array $shipmentFieldsetData): ?ValueAddedServicesDto
     {
-        return $this->createValueAddedServicesWithInsurance($shipmentFieldsetData);
+        return null;
     }
 }

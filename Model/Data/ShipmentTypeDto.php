@@ -43,10 +43,11 @@ class ShipmentTypeDto extends AbstractDto
         $sender = $shipment->getSender();
         $recipient = $shipment->getRecipient();
         $destination = $shipment->getDestination();
-        $insurance = $shipment->getValueAddedServices()->getInsurance();
+        $insurance = $shipment->getValueAddedServices()?->getInsurance();
         $customReferences = json_encode($shipment->getReferences()?->getCustom());
         $parcel = $shipment->getParcel();
         $dimensions = $parcel->getDimensions();
+        $destinationData = $destination->toDbArray();
 
         /** @var ShipmentModel $shipmentDbModel */
         $shipmentDbModel = $this->shipmentFactory->create();
@@ -69,13 +70,18 @@ class ShipmentTypeDto extends AbstractDto
             ->setRecipientPhoneNumber($recipient->getPhone()->getNumber())
             ->setRecipientLanguageCode($recipient->getLanguageCode())
 
-            ->setDestinationCountryCode($destination->getCountryCode())
-            ->setDestinationPointName($destination->getPointName())
+            ->setDestinationCountryCode($destinationData['destination_country_code'])
+            ->setDestinationPointName($destinationData['destination_point_name'])
+            ->setDestinationStreet($destinationData['destination_street'])
+            ->setDestinationHouseNumber($destinationData['destination_house_number'])
+            ->setDestinationFlatNumber($destinationData['destination_flat_number'])
+            ->setDestinationCity($destinationData['destination_city'])
+            ->setDestinationPostalCode($destinationData['destination_postal_code'])
 
             ->setPriority($shipment->getPriority())
 
-            ->setInsuranceValue($insurance->getValue())
-            ->setInsuranceCurrency($insurance->getCurrency())
+            ->setInsuranceValue($insurance?->getValue())
+            ->setInsuranceCurrency($insurance?->getCurrency() ?? '')
 
             ->setReferences($customReferences)
             ->setParcelType($parcel->getType())

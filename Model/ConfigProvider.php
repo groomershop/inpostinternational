@@ -227,6 +227,17 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
+     * Get default origin type
+     *
+     * @return string
+     */
+    public function getDefaultOriginType(): string
+    {
+        $sender = (array) $this->getSenderSettings();
+        return (string) $sender['default_origin_type'];
+    }
+
+    /**
      * Get sender settings
      *
      * @return array<string, mixed>
@@ -316,6 +327,16 @@ class ConfigProvider implements ConfigProviderInterface
     public function isEnabledBackendValidation(): bool
     {
         return (bool) $this->doGetShippingConfig('backend_locker_validation');
+    }
+
+    /**
+     * Get leeway
+     *
+     * @return int
+     */
+    public function getLeeway(): int
+    {
+        return (int) $this->doGetShippingConfig('leeway');
     }
 
     /**

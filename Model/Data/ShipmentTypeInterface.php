@@ -47,4 +47,20 @@ interface ShipmentTypeInterface
      * @return array
      */
     public function toArray(array $keys = []);
+
+    /**
+     * Create destination object
+     *
+     * @param array<string,mixed> $shipmentFieldsetData
+     * @return DestinationInterface
+     */
+    public function createDestination(array $shipmentFieldsetData): DestinationInterface;
+
+    /**
+     * Create value added services object
+     *
+     * @param array<string,mixed> $shipmentFieldsetData
+     * @return ValueAddedServicesDto|null
+     */
+    public function createValueAddedServices(array $shipmentFieldsetData): ?ValueAddedServicesDto;
 }

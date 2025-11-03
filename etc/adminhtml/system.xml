@@ -267,6 +267,10 @@
                     <label>Enable backend locker validation</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="leeway" translate="label" type="text" sortOrder="146" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Tolerance in seconds for clock differences between systems during validation</label>
+                    <comment>Use if You can see errors like "Cannot handle token with iat prior to (...)"</comment>
+                </field>
                 <group id="sender" translate="label" type="text" showInDefault="1" showInWebsite="1" sortOrder="150">
                     <label>Sender data and settings</label>
                     <attribute type="expanded">1</attribute>
