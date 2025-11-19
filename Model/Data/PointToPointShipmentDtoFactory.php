@@ -8,6 +8,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Smartcore\InPostInternational\Model\Config\CountrySettings;
 use Smartcore\InPostInternational\Model\ConfigProvider;
 use Smartcore\InPostInternational\Model\InPostShipmentFactory;
 
@@ -22,6 +23,7 @@ class PointToPointShipmentDtoFactory
      * @param ConfigProvider $configProvider
      * @param Context $context
      * @param Registry $registry
+     * @param CountrySettings $countrySettings
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      */
@@ -31,6 +33,7 @@ class PointToPointShipmentDtoFactory
         private readonly ConfigProvider $configProvider,
         private readonly Context $context,
         private readonly Registry $registry,
+        private readonly CountrySettings $countrySettings,
         private readonly ?AbstractResource $resource = null,
         private readonly ?AbstractDb $resourceCollection = null
     ) {
@@ -47,6 +50,7 @@ class PointToPointShipmentDtoFactory
             $this->shipmentFactory,
             $this->abstractDtoBuilder,
             $this->configProvider,
+            $this->countrySettings,
             $this->context,
             $this->registry,
             $this->resource,

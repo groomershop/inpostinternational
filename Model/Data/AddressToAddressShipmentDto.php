@@ -12,19 +12,17 @@ use Smartcore\InPostInternational\Model\Data\Trait\DestinationAddressCreatorTrai
 use Smartcore\InPostInternational\Model\Data\Trait\OriginAddressCreatorTrait;
 use Smartcore\InPostInternational\Model\InPostShipment as ShipmentModel;
 use Smartcore\InPostInternational\Model\InPostShipmentFactory;
-use Smartcore\InPostInternational\Model\PickupAddressRepository;
 
 class AddressToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTypeInterface
 {
     use DestinationAddressCreatorTrait;
     use OriginAddressCreatorTrait;
     public const ADDRESS_TO_ADDRESS = 'address-to-address';
-    public const LABEL = 'From address to address (courier)';
+    public const LABEL = 'From address to address';
 
     /**
      * @param InPostShipmentFactory $shipmentFactory
      * @param AbstractDtoBuilder $abstractDtoBuilder
-     * @param PickupAddressRepository $pickupAddrRepository
      * @param Context $context
      * @param Registry $registry
      * @param AbstractResource|null $resource
@@ -33,7 +31,6 @@ class AddressToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTyp
     public function __construct(
         readonly InPostShipmentFactory $shipmentFactory,
         private readonly AbstractDtoBuilder $abstractDtoBuilder,
-        private readonly PickupAddressRepository $pickupAddrRepository,
         Context $context,
         Registry $registry,
         ?AbstractResource $resource = null,
@@ -145,7 +142,7 @@ class AddressToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTyp
      */
     public function createDestination(array $shipmentFieldsetData): DestinationInterface
     {
-        return $this->createDestinationAddress($shipmentFieldsetData);
+        return $this->createDestinationAddress($shipmentFieldsetData, self::ADDRESS_TO_ADDRESS);
     }
 
     /**
@@ -153,6 +150,7 @@ class AddressToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTyp
      *
      * @param array $shipmentFieldsetData
      * @return ValueAddedServicesDto|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createValueAddedServices(array $shipmentFieldsetData): ?ValueAddedServicesDto
     {

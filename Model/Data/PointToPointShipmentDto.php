@@ -8,6 +8,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Smartcore\InPostInternational\Model\Config\CountrySettings;
 use Smartcore\InPostInternational\Model\ConfigProvider;
 use Smartcore\InPostInternational\Model\Data\Trait\InsuranceCreatorTrait;
 use Smartcore\InPostInternational\Model\InPostShipment as ShipmentModel;
@@ -20,7 +21,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
 {
     use InsuranceCreatorTrait;
     public const POINT_TO_POINT = 'point-to-point';
-    public const LABEL = 'From point (Locker, Pick-up Drop-off Point, other)';
+    public const LABEL = 'From point to point';
 
     /**
      * PointToPointShipmentDto constructor.
@@ -28,6 +29,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      * @param InPostShipmentFactory $shipmentFactory
      * @param AbstractDtoBuilder $abstractDtoBuilder
      * @param ConfigProvider $configProvider
+     * @param CountrySettings $countrySettings
      * @param Context $context
      * @param Registry $registry
      * @param AbstractResource|null $resource
@@ -37,6 +39,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
         readonly InPostShipmentFactory $shipmentFactory,
         private readonly AbstractDtoBuilder       $abstractDtoBuilder,
         private readonly ConfigProvider           $configProvider,
+        private readonly CountrySettings $countrySettings,
         Context                  $context,
         Registry                 $registry,
         ?AbstractResource        $resource = null,
@@ -87,6 +90,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      *
      * @param array<string,mixed> $shipmentFieldsetData
      * @return OriginDto
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createOrigin(array $shipmentFieldsetData): OriginDto
     {
@@ -153,7 +157,7 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
         /** @var DestinationInterface $destination */
         $destination = $this->abstractDtoBuilder->buildDtoInstance(DestinationDto::class);
         $destination
-            ->setCountryCode($shipmentFieldsetData['destination_country'])
+            ->setCountryCode($shipmentFieldsetData['destination_country_' . self::POINT_TO_POINT])
             ->setPointName($shipmentFieldsetData['point_name']);
 
         return $destination;
@@ -167,6 +171,12 @@ class PointToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeInt
      */
     public function createValueAddedServices(array $shipmentFieldsetData): ?ValueAddedServicesDto
     {
-        return $this->createValueAddedServicesWithInsurance($shipmentFieldsetData);
+        if ($this->countrySettings->canCountryUseInsurance(
+            $shipmentFieldsetData['destination_country_' . self::POINT_TO_POINT]
+        )
+        ) {
+            return $this->createValueAddedServicesWithInsurance($shipmentFieldsetData);
+        }
+        return null;
     }
 }

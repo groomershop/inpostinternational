@@ -216,17 +216,6 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get default shipment type
-     *
-     * @return string
-     */
-    public function getShipmentType(): string
-    {
-        $sender = (array) $this->getSenderSettings();
-        return (string) $sender['shipment_type'];
-    }
-
-    /**
      * Get default origin type
      *
      * @return string

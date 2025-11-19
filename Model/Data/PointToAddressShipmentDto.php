@@ -17,7 +17,7 @@ class PointToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
 {
     use DestinationAddressCreatorTrait;
     public const POINT_TO_ADDRESS = 'point-to-address';
-    public const LABEL = 'From point to address (courier)';
+    public const LABEL = 'From point to address';
 
     /**
      * @param InPostShipmentFactory $shipmentFactory
@@ -81,6 +81,7 @@ class PointToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
      * Create origin object
      *
      * @param array<string,mixed> $shipmentFieldsetData
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createOrigin(array $shipmentFieldsetData): OriginDto
     {
@@ -143,7 +144,7 @@ class PointToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
      */
     public function createDestination(array $shipmentFieldsetData): DestinationInterface
     {
-        return $this->createDestinationAddress($shipmentFieldsetData);
+        return $this->createDestinationAddress($shipmentFieldsetData, self::POINT_TO_ADDRESS);
     }
 
     /**
@@ -151,6 +152,7 @@ class PointToAddressShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
      *
      * @param array<string,mixed> $shipmentFieldsetData
      * @return ValueAddedServicesDto|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createValueAddedServices(array $shipmentFieldsetData): ?ValueAddedServicesDto
     {

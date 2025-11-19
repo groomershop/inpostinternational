@@ -17,10 +17,12 @@ trait DestinationAddressCreatorTrait
      * Creates ValueAddedServices from insurance
      *
      * @param array $shipmentFieldsetData
+     * @param string $destCountryType
      * @return DestinationInterface
      */
     protected function createDestinationAddress(
-        array $shipmentFieldsetData
+        array $shipmentFieldsetData,
+        string $destCountryType
     ): DestinationInterface {
         /** @var AddressDto $address */
         $address = $this->abstractDtoBuilder->buildDtoInstance(AddressDto::class);
@@ -30,7 +32,7 @@ trait DestinationAddressCreatorTrait
             ->setFlatNumber($shipmentFieldsetData['flat_number'])
             ->setCity($shipmentFieldsetData['city'])
             ->setPostalCode($shipmentFieldsetData['postal_code'])
-            ->setCountryCode($shipmentFieldsetData['destination_country']);
+            ->setCountryCode($shipmentFieldsetData['destination_country_' . $destCountryType]);
 
         /** @var DestinationAddressDto $destinationAddress */
         $destinationAddress = $this->abstractDtoBuilder->buildDtoInstance(DestinationAddressDto::class);

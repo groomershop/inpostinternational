@@ -19,7 +19,6 @@ use Smartcore\InPostInternational\Model\Config\Source\AutoInsurance;
 use Smartcore\InPostInternational\Model\Config\Source\Currency;
 use Smartcore\InPostInternational\Model\Config\Source\LabelFormat;
 use Smartcore\InPostInternational\Model\Config\Source\Priority;
-use Smartcore\InPostInternational\Model\Config\Source\ShippingMethods;
 use Smartcore\InPostInternational\Model\ConfigProvider;
 use Smartcore\InPostInternational\Model\ParcelTemplateRepository;
 use Smartcore\InPostInternational\Model\PickupAddressRepository;
@@ -54,7 +53,6 @@ class CreateDataProvider extends DataProvider
      * @param SessionManagerInterface $sessionManager
      * @param LabelFormat $labelFormat
      * @param Priority $priority
-     * @param ShippingMethods $shippingMethods
      * @param Currency $currency
      * @param OrderRepositoryInterface $orderRepository
      * @param array $meta
@@ -77,7 +75,6 @@ class CreateDataProvider extends DataProvider
         private SessionManagerInterface  $sessionManager,
         private LabelFormat              $labelFormat,
         private Priority                 $priority,
-        private ShippingMethods          $shippingMethods,
         private Currency                 $currency,
         private OrderRepositoryInterface $orderRepository,
         array                            $meta = [],
@@ -121,11 +118,11 @@ class CreateDataProvider extends DataProvider
         if ($orderId) {
             $order = $this->orderRepository->get($orderId);
             if ($order->getId()) {
-                /** @var Order $order */
-                $shipmentType = $this->getDefaultShipmentType($order);
+                $shipmentType = $this->getDefaultShipmentType();
                 if ($shipmentType !== null) {
                     $defaultData[ShipmentProcessor::SHIPMENT_FIELDSET]['shipment_type'] = $shipmentType;
                 }
+                /** @var Order $order */
                 $shippingAddress = $order->getShippingAddress();
                 $countryId = $shippingAddress->getCountryId();
                 $grandTotal = $this->priceCurrency->convertAndRound($order->getGrandTotal());
@@ -136,7 +133,10 @@ class CreateDataProvider extends DataProvider
                     'order_id' => $orderId,
                     'order_increment_id' => $order->getIncrementId(),
                     'order_details' => sprintf('%s - %s %s', $order->getIncrementId(), $grandTotal, $currencyCode),
-                    'destination_country' => $countryId,
+                    'destination_country_point-to-point' => $countryId,
+                    'destination_country_point-to-address' => $countryId,
+                    'destination_country_address-to-address' => $countryId,
+                    'destination_country_address-to-point' => $countryId,
                     'point_name' => $order->getInpostinternationalLockerId(),
                     'first_name' => $order->getCustomerFirstname(),
                     'last_name' => $order->getCustomerLastname(),
@@ -218,17 +218,12 @@ class CreateDataProvider extends DataProvider
     /**
      * Get default shipment type based on order's shipping method
      *
-     * @param Order $order
-     * @return string|null
+     * @return string
      */
-    private function getDefaultShipmentType(Order $order): ?string
+    private function getDefaultShipmentType(): string
     {
+        $shippingType = $this->request->getParam('shipping_type');
         $originType = $this->configProvider->getDefaultOriginType();
-        $shippingMethodCode = $order->getShippingMethod();
-        if ($this->configProvider->isSupportedShippingMethod($shippingMethodCode)) {
-            $destinationType = $this->shippingMethods->getShippingMethodDestinationType($shippingMethodCode);
-            return $originType . '-to-' . $destinationType;
-        }
-        return null;
+        return $originType . '-to-' . $shippingType;
     }
 }

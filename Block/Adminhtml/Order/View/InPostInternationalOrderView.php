@@ -38,13 +38,26 @@ class InPostInternationalOrderView extends AbstractOrder
     }
 
     /**
-     * Get the list of available Inpost shipping methods
+     * Get the list of Inpost shipping types
      *
-     * @return array
+     * @param string $shippingMethod
+     * @return array<mixed>
      */
-    public function getInpostShippingMethods(): array
+    public function getInpostShippingTypes(string $shippingMethod): array
     {
-        return $this->shippingMethods->toOptionArray(true);
+        $destinationType = $this->shippingMethods->getShippingMethodDestinationType($shippingMethod);
+        return [
+            [
+                'value' => 'address',
+                'label' => __('InPost International to address'),
+                'selected' => $destinationType === 'address',
+            ],
+            [
+                'value' => 'point',
+                'label' => __('InPost International to point (parcel locker)'),
+                'selected' => $destinationType === 'point',
+            ],
+        ];
     }
 
     /**
@@ -108,7 +121,7 @@ class InPostInternationalOrderView extends AbstractOrder
      * @return mixed
      * @throws LocalizedException
      */
-    public function getSelectedLockerId()
+    public function getSelectedLockerId(): mixed
     {
         return $this->getOrder()->getInpostinternationalLockerId();
     }

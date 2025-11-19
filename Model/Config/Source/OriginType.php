@@ -19,11 +19,11 @@ class OriginType implements OptionSourceInterface
         return [
             [
                 'value' => self::ORIGIN_POINT,
-                'label' => __('Point (Parcel Locker)')
+                'label' => __('From point (Parcel Locker)')
             ],
             [
                 'value' => self::ORIGIN_ADDRESS,
-                'label' => __('Address (Courier Pickup)')
+                'label' => __('From address (Courier Pickup)')
             ]
         ];
     }

@@ -8,11 +8,11 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Smartcore\InPostInternational\Model\Config\CountrySettings;
 use Smartcore\InPostInternational\Model\Data\Trait\InsuranceCreatorTrait;
 use Smartcore\InPostInternational\Model\Data\Trait\OriginAddressCreatorTrait;
 use Smartcore\InPostInternational\Model\InPostShipment as ShipmentModel;
 use Smartcore\InPostInternational\Model\InPostShipmentFactory;
-use Smartcore\InPostInternational\Model\PickupAddressRepository;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,14 +22,14 @@ class AddressToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
     use InsuranceCreatorTrait;
     use OriginAddressCreatorTrait;
     public const ADDRESS_TO_POINT = 'address-to-point';
-    public const LABEL = 'From address (courier pickup)';
+    public const LABEL = 'From address to point';
 
     /**
      * AddressToPointShipmentDto constructor.
      *
      * @param InPostShipmentFactory $shipmentFactory
      * @param AbstractDtoBuilder $abstractDtoBuilder
-     * @param PickupAddressRepository $pickupAddrRepository
+     * @param CountrySettings $countrySettings
      * @param Context $context
      * @param Registry $registry
      * @param AbstractResource|null $resource
@@ -38,7 +38,7 @@ class AddressToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
     public function __construct(
         readonly InPostShipmentFactory $shipmentFactory,
         private readonly AbstractDtoBuilder       $abstractDtoBuilder,
-        private readonly PickupAddressRepository  $pickupAddrRepository,
+        private readonly CountrySettings $countrySettings,
         Context                  $context,
         Registry                 $registry,
         ?AbstractResource        $resource = null,
@@ -154,7 +154,7 @@ class AddressToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
         /** @var DestinationInterface $destination */
         $destination = $this->abstractDtoBuilder->buildDtoInstance(DestinationDto::class);
         $destination
-            ->setCountryCode($shipmentFieldsetData['destination_country'])
+            ->setCountryCode($shipmentFieldsetData['destination_country_' . self::ADDRESS_TO_POINT])
             ->setPointName($shipmentFieldsetData['point_name']);
 
         return $destination;
@@ -168,6 +168,12 @@ class AddressToPointShipmentDto extends ShipmentTypeDto implements ShipmentTypeI
      */
     public function createValueAddedServices(array $shipmentFieldsetData): ?ValueAddedServicesDto
     {
-        return $this->createValueAddedServicesWithInsurance($shipmentFieldsetData);
+        if ($this->countrySettings->canCountryUseInsurance(
+            $shipmentFieldsetData['destination_country_' . self::ADDRESS_TO_POINT]
+        )
+        ) {
+            return $this->createValueAddedServicesWithInsurance($shipmentFieldsetData);
+        }
+        return null;
     }
 }
