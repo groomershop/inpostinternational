@@ -107,7 +107,6 @@ class CreateDataProvider extends DataProvider
         $insuranceValue = $this->getInsuranceValue();
         $defaultData = [
             ShipmentProcessor::SHIPMENT_FIELDSET => [
-                'shipment_type' => $this->configProvider->getShipmentType(),
                 'parcel_template' => $parcelTmplDefaultId,
                 'origin' => $pickupAddrDefaultId,
                 'insurance_value' => $insuranceValue,
@@ -119,6 +118,10 @@ class CreateDataProvider extends DataProvider
         if ($orderId) {
             $order = $this->orderRepository->get($orderId);
             if ($order->getId()) {
+                $shipmentType = $this->getDefaultShipmentType();
+                if ($shipmentType !== null) {
+                    $defaultData[ShipmentProcessor::SHIPMENT_FIELDSET]['shipment_type'] = $shipmentType;
+                }
                 /** @var Order $order */
                 $shippingAddress = $order->getShippingAddress();
                 $countryId = $shippingAddress->getCountryId();
@@ -130,11 +133,19 @@ class CreateDataProvider extends DataProvider
                     'order_id' => $orderId,
                     'order_increment_id' => $order->getIncrementId(),
                     'order_details' => sprintf('%s - %s %s', $order->getIncrementId(), $grandTotal, $currencyCode),
-                    'destination_country' => $countryId,
+                    'destination_country_point-to-point' => $countryId,
+                    'destination_country_point-to-address' => $countryId,
+                    'destination_country_address-to-address' => $countryId,
+                    'destination_country_address-to-point' => $countryId,
                     'point_name' => $order->getInpostinternationalLockerId(),
                     'first_name' => $order->getCustomerFirstname(),
                     'last_name' => $order->getCustomerLastname(),
                     'company_name' => $shippingAddress->getCompany(),
+                    'street' => $shippingAddress->getStreetLine(1),
+                    'city' => $shippingAddress->getCity(),
+                    'postal_code' => $shippingAddress->getPostcode(),
+                    'house_number' => $shippingAddress->getStreetLine(2),
+                    'flat_number' => $shippingAddress->getStreetLine(3),
                     'email' => $order->getCustomerEmail(),
                     'phone_prefix' => $this->countrySettings->getPhonePrefix($countryId),
                     'phone_number' => $this->countrySettings->getPhoneNumberWithoutPrefixForCountry(
@@ -202,5 +213,17 @@ class CreateDataProvider extends DataProvider
             default => 0,
         };
         return (float) min($insuranceValue, $this->configProvider->getInsuranceMaxValue());
+    }
+
+    /**
+     * Get default shipment type based on order's shipping method
+     *
+     * @return string
+     */
+    private function getDefaultShipmentType(): string
+    {
+        $shippingType = $this->request->getParam('shipping_type');
+        $originType = $this->configProvider->getDefaultOriginType();
+        return $originType . '-to-' . $shippingType;
     }
 }

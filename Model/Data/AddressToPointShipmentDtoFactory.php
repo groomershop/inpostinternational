@@ -8,8 +8,8 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Smartcore\InPostInternational\Model\Config\CountrySettings;
 use Smartcore\InPostInternational\Model\InPostShipmentFactory;
-use Smartcore\InPostInternational\Model\PickupAddressRepository;
 
 class AddressToPointShipmentDtoFactory
 {
@@ -18,7 +18,7 @@ class AddressToPointShipmentDtoFactory
      *
      * @param InPostShipmentFactory $shipmentFactory
      * @param AbstractDtoBuilder $abstractDtoBuilder
-     * @param PickupAddressRepository $pickupAddrRepository
+     * @param CountrySettings $countrySettings
      * @param Context $context
      * @param Registry $registry
      * @param AbstractResource|null $resource
@@ -27,7 +27,7 @@ class AddressToPointShipmentDtoFactory
     public function __construct(
         private readonly InPostShipmentFactory $shipmentFactory,
         private readonly AbstractDtoBuilder       $abstractDtoBuilder,
-        private readonly PickupAddressRepository  $pickupAddrRepository,
+        private readonly CountrySettings $countrySettings,
         private readonly Context $context,
         private readonly Registry $registry,
         private readonly ?AbstractResource $resource = null,
@@ -45,7 +45,7 @@ class AddressToPointShipmentDtoFactory
         return new AddressToPointShipmentDto(
             $this->shipmentFactory,
             $this->abstractDtoBuilder,
-            $this->pickupAddrRepository,
+            $this->countrySettings,
             $this->context,
             $this->registry,
             $this->resource,

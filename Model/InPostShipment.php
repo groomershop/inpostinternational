@@ -563,12 +563,117 @@ class InPostShipment extends AbstractModel implements InPostShipmentInterface
     /**
      * Set the name of the destination point
      *
-     * @param string $destinationPointName
+     * @param string|null $destPointName
      * @return $this
      */
-    public function setDestinationPointName(string $destinationPointName): self
+    public function setDestinationPointName(?string $destPointName): self
     {
-        return $this->setData(self::DESTINATION_POINT_NAME, $destinationPointName);
+        return $this->setData(self::DESTINATION_POINT_NAME, $destPointName);
+    }
+
+    /**
+     * Get the destination postal code
+     *
+     * @return string|null
+     */
+    public function getDestinationPostalCode(): ?string
+    {
+        return $this->getData(self::DESTINATION_POSTAL_CODE);
+    }
+
+    /**
+     * Set the destination postal code
+     *
+     * @param string|null $destPostalCode
+     * @return self
+     */
+    public function setDestinationPostalCode(?string $destPostalCode): self
+    {
+        return $this->setData(self::DESTINATION_POSTAL_CODE, $destPostalCode);
+    }
+
+    /**
+     * Get the destination city
+     *
+     * @return string|null
+     */
+    public function getDestinationCity(): ?string
+    {
+        return $this->getData(self::DESTINATION_CITY);
+    }
+
+    /**
+     * Set the destination city
+     *
+     * @param string|null $destCity
+     * @return self
+     */
+    public function setDestinationCity(?string $destCity): self
+    {
+        return $this->setData(self::DESTINATION_CITY, $destCity);
+    }
+
+    /**
+     * Get the destination street
+     *
+     * @return string
+     */
+    public function getDestinationStreet(): string
+    {
+        return $this->getData(self::DESTINATION_STREET);
+    }
+
+    /**
+     * Set the destination street
+     *
+     * @param ?string $destStreet
+     * @return self
+     */
+    public function setDestinationStreet(?string $destStreet): self
+    {
+        return $this->setData(self::DESTINATION_STREET, $destStreet);
+    }
+
+    /**
+     * Get the destination house number
+     *
+     * @return string|null
+     */
+    public function getDestinationHouseNumber(): ?string
+    {
+        return $this->getData(self::DESTINATION_HOUSE_NUMBER);
+    }
+
+    /**
+     * Set the destination house number
+     *
+     * @param string|null $destHouseNumber
+     * @return self
+     */
+    public function setDestinationHouseNumber(?string $destHouseNumber): self
+    {
+        return $this->setData(self::DESTINATION_HOUSE_NUMBER, $destHouseNumber);
+    }
+
+    /**
+     * Get the destination flat number
+     *
+     * @return string|null
+     */
+    public function getDestinationFlatNumber(): ?string
+    {
+        return $this->getData(self::DESTINATION_FLAT_NUMBER);
+    }
+
+    /**
+     * Set the destination flat number
+     *
+     * @param string|null $destFlatNumber
+     * @return self
+     */
+    public function setDestinationFlatNumber(?string $destFlatNumber): self
+    {
+        return $this->setData(self::DESTINATION_FLAT_NUMBER, $destFlatNumber);
     }
 
     /**

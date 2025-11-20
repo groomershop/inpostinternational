@@ -11,7 +11,7 @@
                 <auto_insurance>1</auto_insurance>
                 <max_insurance_value>5000</max_insurance_value>
                 <sender>
-                    <shipment_type>address-to-point</shipment_type>
+                    <default_origin_type>point</default_origin_type>
                     <language>pl_PL</language>
                     <origin_country_code>PL</origin_country_code>
                 </sender>
@@ -26,9 +26,20 @@
                 <weight_out_of_range>use_price</weight_out_of_range>
                 <position>1</position>
                 <sallowspecific>1</sallowspecific>
-                <specificcountry>ES,IT,PT</specificcountry>
+                <specificcountry>AT,ES,IT,PT</specificcountry>
                 <default_logo>Smartcore_InPostInternational::images/inpostinternational_logo.png</default_logo>
             </inpostinternationalcourier>
+            <inpostinternationald2d>
+                <model>Smartcore\InPostInternational\Model\Carrier\InPostInternationalD2D</model>
+                <active>0</active>
+                <title>InPost International to address</title>
+                <name>InPost International to address</name>
+                <weight_out_of_range>use_price</weight_out_of_range>
+                <position>1</position>
+                <sallowspecific>1</sallowspecific>
+                <specificcountry>AT,HU</specificcountry>
+                <default_logo>Smartcore_InPostInternational::images/inpostinternational_logo.png</default_logo>
+            </inpostinternationald2d>
             <mondialrelaycourier>
                 <model>Smartcore\InPostInternational\Model\Carrier\MondialRelayCourier</model>
                 <active>0</active>

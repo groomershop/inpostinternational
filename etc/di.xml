@@ -12,6 +12,8 @@
             <argument name="shipmentTypes" xsi:type="array">
                 <item name="addressToPoint" xsi:type="object">Smartcore\InPostInternational\Model\Data\AddressToPointShipmentDto</item>
                 <item name="pointToPoint" xsi:type="object">Smartcore\InPostInternational\Model\Data\PointToPointShipmentDto</item>
+                <item name="addressToAddress" xsi:type="object">Smartcore\InPostInternational\Model\Data\AddressToAddressShipmentDto</item>
+                <item name="pointToAddress" xsi:type="object">Smartcore\InPostInternational\Model\Data\PointToAddressShipmentDto</item>
             </argument>
         </arguments>
     </type>
@@ -31,6 +33,7 @@
             <argument name="couriers" xsi:type="array">
                 <item name="inpostcourier" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\InpostCourier</item>
                 <item name="mondialrelaycourier" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\MondialRelayCourier</item>
+                <item name="inpostinternationald2d" xsi:type="object">Smartcore\InPostInternational\Model\Carrier\InPostInternationalD2D</item>
             </argument>
         </arguments>
     </type>

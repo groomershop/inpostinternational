@@ -9,10 +9,10 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Smartcore\InPostInternational\Model\Config\CountrySettings;
 use Smartcore\InPostInternational\Model\ConfigProvider;
 
-class CountryShipToInPost extends CountryShip implements OptionSourceInterface
+class DestinationCountryPointToPoint extends DestinationCountry implements OptionSourceInterface
 {
     /**
-     * Countries
+     * Shipping methods mapper
      *
      * @param ConfigProvider $configProvider
      * @param CountryCollectionFactory $countryCollFactory
@@ -21,9 +21,9 @@ class CountryShipToInPost extends CountryShip implements OptionSourceInterface
     public function __construct(
         protected ConfigProvider           $configProvider,
         protected CountryCollectionFactory $countryCollFactory,
-        protected CountrySettings          $countrySettings
+        protected CountrySettings          $countrySettings,
     ) {
-        parent::__construct($countryCollFactory);
+        parent::__construct($configProvider, $countryCollFactory);
     }
 
     /**
@@ -31,8 +31,11 @@ class CountryShipToInPost extends CountryShip implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $allCountries = $this->countrySettings->getCountryCanInPostShipToSettings();
-
-        return $this->getOptionsFromCountrySettings($allCountries);
+        $options = parent::toOptionArray();
+        $allowedCountries = $this->countrySettings->getCountryCanInPostShipPointToPointSettings();
+        return array_filter(
+            $options,
+            static fn ($option) => in_array($option['value'], array_keys($allowedCountries), true)
+        );
     }
 }

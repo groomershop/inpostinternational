@@ -1,0 +1,32 @@
+<tr class="row">
+    <td class="col col-method">
+        <input type="radio"
+               class="radio"
+               data-bind="
+                    click: $parent.selectShippingMethod,
+                    checked: $parent.isSelected,
+                    value: method.carrier_code + '_' + method.method_code,
+                    attr: {
+                        'id': 'shipping_method_' + method.method_code
+                    },
+                    enable: !method.error_message"
+        />
+    </td>
+    <td class="col col-price" data-bind="foreach: $parent.getRegion('price')">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </td>
+    <td class="col col-method">
+        <label data-bind="attr: {'for': 'shipping_method_' + method.method_code}">
+            <span data-bind="text: method.method_title"></span>
+        </label>
+    </td>
+    <td class="col col-carrier">
+        <div class="carrier-title-wrapper">
+            <img data-bind="attr: {
+                src: window.checkoutConfig.inpostGeowidget['logoUrl_' + method.carrier_code],
+                alt: method.carrier_title
+            }" class="carrier-logo" />
+            <span data-bind="text: method.carrier_title"></span>
+        </div>
+    </td>
+</tr>

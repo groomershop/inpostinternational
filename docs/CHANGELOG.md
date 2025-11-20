@@ -1,6 +1,13 @@
 # Changelog for Smartcore InPost International
 All notable changes to this project will be documented in this file.
 
+## 1.3.0 - 2025-11-20
+### Added
+- Austria and Hungary support
+- Door to door shipping method
+### Fixed
+- Country source model loading issue
+
 ## 1.2.0 - 2025-07-31
 ### Added
 - Backend validation for locker

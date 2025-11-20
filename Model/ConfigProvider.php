@@ -216,14 +216,14 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get default shipment type
+     * Get default origin type
      *
      * @return string
      */
-    public function getShipmentType(): string
+    public function getDefaultOriginType(): string
     {
         $sender = (array) $this->getSenderSettings();
-        return (string) $sender['shipment_type'];
+        return (string) $sender['default_origin_type'];
     }
 
     /**
@@ -316,6 +316,16 @@ class ConfigProvider implements ConfigProviderInterface
     public function isEnabledBackendValidation(): bool
     {
         return (bool) $this->doGetShippingConfig('backend_locker_validation');
+    }
+
+    /**
+     * Get leeway
+     *
+     * @return int
+     */
+    public function getLeeway(): int
+    {
+        return (int) $this->doGetShippingConfig('leeway');
     }
 
     /**
@@ -494,14 +504,19 @@ class ConfigProvider implements ConfigProviderInterface
         }
 
         $shippingMethods = [];
+        $geowidgetShipMethods = [];
         foreach ($this->couriers as $courier) {
             $shippingMethods[] = $courier->getCarrierCode();
+            if ($courier->getDestinationType() === 'point') {
+                $geowidgetShipMethods[] = $courier->getCarrierCode();
+            }
         }
 
         $result = [
             'token' => $this->getGeowidgetToken(),
             'isSandbox' => $this->getMode() === Mode::SANDBOX,
             'shippingMethods' => implode(',', $shippingMethods),
+            'geowidgetShippingMethods' => implode(',', $geowidgetShipMethods),
             'savePointUrl' => $this->urlBuilder->getUrl('inpostinternational/point/save'),
             'savedPoint' => $pointId, // Backward compatibility, use 'savedPoint_<shippingMethod>' instead
             'geowidgetCountries' => $this->getShippingCountries(),

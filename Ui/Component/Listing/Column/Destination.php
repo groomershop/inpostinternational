@@ -37,8 +37,15 @@ class Destination extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
-                $item[$this->getData('name')] = $this->getCountryName($item['destination_country_code'])
-                    . '<br/>' . $item['destination_point_name'];
+                if ($item['destination_point_name']) {
+                    $item[$this->getData('name')] = $this->getCountryName($item['destination_country_code'])
+                        . '<br/>' . $item['destination_point_name'];
+                    continue;
+                }
+                $item[$this->getData('name')] = $item['destination_street'] . ' ' . $item['destination_house_number']
+                    . ' ' . $item['destination_flat_number'] . '<br/>'
+                    . $item['destination_postal_code'] . ' ' . $item['destination_city'] . '<br/>'
+                    . $item['destination_country_code'];
             }
         }
 

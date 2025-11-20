@@ -30,9 +30,9 @@ class ShipmentDto extends AbstractDto
     /**
      * Destination address for the shipment
      *
-     * @var DestinationDto
+     * @var DestinationInterface
      */
-    public DestinationDto $destination;
+    public DestinationInterface $destination;
 
     /**
      * Priority level of the shipment (e.g., high, normal)
@@ -44,9 +44,9 @@ class ShipmentDto extends AbstractDto
     /**
      * Value-added services associated with the shipment
      *
-     * @var ValueAddedServicesDto
+     * @var ?ValueAddedServicesDto
      */
-    public ValueAddedServicesDto $valueAddedServices;
+    public ?ValueAddedServicesDto $valueAddedServices;
 
     /**
      * References associated with the shipment
@@ -131,9 +131,9 @@ class ShipmentDto extends AbstractDto
     /**
      * Get the destination address for the shipment
      *
-     * @return DestinationDto
+     * @return DestinationInterface
      */
-    public function getDestination(): DestinationDto
+    public function getDestination(): DestinationInterface
     {
         return $this->destination;
     }
@@ -141,10 +141,10 @@ class ShipmentDto extends AbstractDto
     /**
      * Set the destination address for the shipment
      *
-     * @param DestinationDto $destination
+     * @param DestinationInterface $destination
      * @return $this
      */
-    public function setDestination(DestinationDto $destination): static
+    public function setDestination(DestinationInterface $destination): static
     {
         $this->destination = $destination;
         return $this;
@@ -175,9 +175,9 @@ class ShipmentDto extends AbstractDto
     /**
      * Get the value-added services associated with the shipment
      *
-     * @return ValueAddedServicesDto
+     * @return ValueAddedServicesDto|null
      */
-    public function getValueAddedServices(): ValueAddedServicesDto
+    public function getValueAddedServices(): ?ValueAddedServicesDto
     {
         return $this->valueAddedServices;
     }

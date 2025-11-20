@@ -16,73 +16,133 @@ class CountrySettings
             'languageCode' => 'it_IT',
             'phonePrefix' => '+39',
             'currency' => 'EUR',
-            'canInPostShipTo' => true,
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => false,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
         'FR' => [
             'languageCode' => 'fr_FR',
             'phonePrefix' => '+33',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => true,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
         'LU' => [
             'languageCode' => 'fr_LU',
             'phonePrefix' => '+352',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => true,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
         'BE' => [
             'languageCode' => 'nl_BE',
             'phonePrefix' => '+32',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => true,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
         'NL' => [
             'languageCode' => 'nl_NL',
             'phonePrefix' => '+31',
             'currency' => 'EUR',
-            'canInPostShipTo' => false,
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => true,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
         'ES' => [
             'languageCode' => 'es_ES',
             'phonePrefix' => '+34',
             'currency' => 'EUR',
-            'canInPostShipTo' => true,
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => false,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
         'PT' => [
             'languageCode' => 'pt_PT',
             'phonePrefix' => '+351',
             'currency' => 'EUR',
-            'canInPostShipTo' => true,
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => false,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
         'PL' => [
             'languageCode' => 'pl_PL',
             'phonePrefix' => '+48',
             'currency' => 'PLN',
-            'canInPostShipTo' => false,
+            'canInPostShipPointToPoint' => false,
+            'canInPostShipAddressToPoint' => false,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => false,
-            'canShipFrom' => true
+            'canShipFrom' => true,
+            'canInsurance' => true
         ],
         'GB' => [
             'languageCode' => 'en_GB',
             'phonePrefix' => '+44',
             'currency' => 'GBP',
-            'canInPostShipTo' => false,
+            'canInPostShipPointToPoint' => false,
+            'canInPostShipAddressToPoint' => false,
+            'canInPostShipPointToAddress' => false,
+            'canInPostShipAddressToAddress' => false,
             'canMondialRelayShipTo' => false,
-            'canShipFrom' => false
+            'canShipFrom' => false,
+            'canInsurance' => true
+        ],
+        'AT' => [
+            'languageCode' => 'de_AT',
+            'phonePrefix' => '+43',
+            'currency' => 'EUR',
+            'canInPostShipPointToPoint' => true,
+            'canInPostShipAddressToPoint' => true,
+            'canInPostShipPointToAddress' => true,
+            'canInPostShipAddressToAddress' => true,
+            'canMondialRelayShipTo' => false,
+            'canShipFrom' => false,
+            'canInsurance' => false
+        ],
+        'HU' => [
+            'languageCode' => 'hu_HU',
+            'phonePrefix' => '+36',
+            'currency' => 'HUF',
+            'canInPostShipPointToPoint' => false,
+            'canInPostShipAddressToPoint' => false,
+            'canInPostShipPointToAddress' => true,
+            'canInPostShipAddressToAddress' => true,
+            'canMondialRelayShipTo' => false,
+            'canShipFrom' => false,
+            'canInsurance' => true
         ],
     ];
 
@@ -92,7 +152,7 @@ class CountrySettings
      * @param TranslatedLists $translatedLists
      */
     public function __construct(
-        private TranslatedLists $translatedLists
+        private readonly TranslatedLists $translatedLists
     ) {
     }
 
@@ -107,13 +167,69 @@ class CountrySettings
     }
 
     /**
-     * Get countries that can be shipped to by InPost
+     * Get countries that can be shipped to points by InPost
+     *
+     * @return array|array[]
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
+    public function getCountryCanInPostShipToPointSettings(): array
+    {
+        $pointToPointCountries = $this->getCountryCanInPostShipPointToPointSettings();
+        $addressToPointCountries = $this->getCountryCanInPostShipAddressToPointSettings();
+        return array_merge($pointToPointCountries, $addressToPointCountries);
+    }
+
+    /**
+     * Get countries that can be shipped point to point by InPost
      *
      * @return array|array[]
      */
-    public function getCountryCanInPostShipToSettings(): array
+    public function getCountryCanInPostShipPointToPointSettings(): array
     {
-        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipTo']);
+        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipPointToPoint']);
+    }
+
+    /**
+     * Get countries that can be shipped address to point by InPost
+     *
+     * @return array|array[]
+     */
+    public function getCountryCanInPostShipAddressToPointSettings(): array
+    {
+        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipAddressToPoint']);
+    }
+
+    /**
+     * Get countries that can be shipped to address by InPost
+     *
+     * @return array|array[]
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
+    public function getCountryCanInPostShipToAddressSettings(): array
+    {
+        $pointToAddressCountries = $this->getCountryCanInPostShipPointToAddressSettings();
+        $addressToAddressCountries = $this->getCountryCanInPostShipAddressToAddressSettings();
+        return array_merge($pointToAddressCountries, $addressToAddressCountries);
+    }
+
+    /**
+     * Get countries that can be shipped point to address by InPost
+     *
+     * @return array|array[]
+     */
+    public function getCountryCanInPostShipPointToAddressSettings(): array
+    {
+        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipPointToAddress']);
+    }
+
+    /**
+     * Get countries that can be shipped address to address by InPost
+     *
+     * @return array|array[]
+     */
+    public function getCountryCanInPostShipAddressToAddressSettings(): array
+    {
+        return array_filter($this->countrySettings, fn ($country) => $country['canInPostShipAddressToAddress']);
     }
 
     /**
@@ -140,9 +256,9 @@ class CountrySettings
      * Get language code by country code
      *
      * @param string $countryCode
-     * @return mixed|string|null
+     * @return string|null
      */
-    public function getLanguageCode(string $countryCode)
+    public function getLanguageCode(string $countryCode): ?string
     {
         return $this->countrySettings[$countryCode]['languageCode'] ?? null;
     }
@@ -151,9 +267,9 @@ class CountrySettings
      * Get phone prefix by country code
      *
      * @param string $countryCode
-     * @return mixed|string|null
+     * @return string|null
      */
-    public function getPhonePrefix(string $countryCode)
+    public function getPhonePrefix(string $countryCode): ?string
     {
         return $this->countrySettings[$countryCode]['phonePrefix'] ?? null;
     }
@@ -202,5 +318,16 @@ class CountrySettings
             }
         }
         return null;
+    }
+
+    /**
+     * Check if country can use insurance
+     *
+     * @param string $countryCode
+     * @return bool
+     */
+    public function canCountryUseInsurance(string $countryCode): bool
+    {
+        return $this->countrySettings[$countryCode]['canInsurance'] ?? false;
     }
 }

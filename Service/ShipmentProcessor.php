@@ -14,9 +14,7 @@ use Smartcore\InPostInternational\Model\Api\ErrorProcessor;
 use Smartcore\InPostInternational\Model\Api\InternationalApiService;
 use Smartcore\InPostInternational\Model\ConfigProvider;
 use Smartcore\InPostInternational\Model\Data\AbstractDtoBuilder;
-use Smartcore\InPostInternational\Model\Data\DestinationDto;
 use Smartcore\InPostInternational\Model\Data\DimensionsDto;
-use Smartcore\InPostInternational\Model\Data\InsuranceDto;
 use Smartcore\InPostInternational\Model\Data\LabelDto;
 use Smartcore\InPostInternational\Model\Data\ParcelDto;
 use Smartcore\InPostInternational\Model\Data\RecipientDto;
@@ -24,7 +22,6 @@ use Smartcore\InPostInternational\Model\Data\SenderDto;
 use Smartcore\InPostInternational\Model\Data\ShipmentDto;
 use Smartcore\InPostInternational\Model\Data\ShipmentTypeFactory;
 use Smartcore\InPostInternational\Model\Data\ShipmentTypeInterface;
-use Smartcore\InPostInternational\Model\Data\ValueAddedServicesDto;
 use Smartcore\InPostInternational\Model\Data\WeightDto;
 use Smartcore\InPostInternational\Model\InPostShipment;
 use Smartcore\InPostInternational\Model\InPostShipmentRepository;
@@ -185,6 +182,7 @@ class ShipmentProcessor extends CommonProcessor
      * @param array $shipmentFieldsetData
      * @param ShipmentTypeInterface $shipmentType
      * @return ShipmentDto
+     * @throws LocalizedException
      */
     private function createShipmentDto(array $shipmentFieldsetData, ShipmentTypeInterface $shipmentType): ShipmentDto
     {
@@ -193,9 +191,9 @@ class ShipmentProcessor extends CommonProcessor
         $shipment->setSender($this->createSender())
             ->setRecipient($this->createRecipient($shipmentFieldsetData))
             ->setOrigin($shipmentType->createOrigin($shipmentFieldsetData))
-            ->setDestination($this->createDestination($shipmentFieldsetData))
+            ->setDestination($shipmentType->createDestination($shipmentFieldsetData))
             ->setPriority($this->createPriority($shipmentFieldsetData))
-            ->setValueAddedServices($this->createValueAddedServices($shipmentFieldsetData))
+            ->setValueAddedServices($shipmentType->createValueAddedServices($shipmentFieldsetData))
             ->setReferences($this->createReferences($shipmentFieldsetData))
             ->setParcel($this->createParcel($shipmentFieldsetData));
         return $shipment;
@@ -205,10 +203,14 @@ class ShipmentProcessor extends CommonProcessor
      * Create recipient object
      *
      * @return SenderDto
+     * @throws LocalizedException
      */
     private function createSender(): SenderDto
     {
         $senderSettings = $this->configProvider->getSenderSettings();
+
+        $this->validateSenderSettings($senderSettings);
+
         $phoneData = [
             'prefix' => $senderSettings['phone_prefix'],
             'number' => $senderSettings['phone_number']
@@ -222,6 +224,38 @@ class ShipmentProcessor extends CommonProcessor
             ->setPhone($this->createPhone($phoneData))
             ->setLanguageCode($senderSettings['language']);
         return $sender;
+    }
+
+    /**
+     * Validate sender settings
+     *
+     * @param array<string,mixed> $senderSettings
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateSenderSettings(array $senderSettings): void
+    {
+        $requiredKeys = [
+            'first_name',
+            'last_name',
+            'email',
+            'phone_prefix',
+            'phone_number',
+            'language'
+        ];
+        foreach ($requiredKeys as $key) {
+            if (!isset($senderSettings[$key])) {
+                throw new LocalizedException(
+                    __('Please fill all sender settings in InPost International configuration.')
+                );
+            }
+        }
+
+        if (!preg_match('/^\+(\d)+$/', $senderSettings['phone_prefix'])) {
+            throw new LocalizedException(
+                __('Please provide valid phone prefix in InPost International configuration (e.g. +48).')
+            );
+        }
     }
 
     /**
@@ -249,21 +283,6 @@ class ShipmentProcessor extends CommonProcessor
     }
 
     /**
-     * Create destination object
-     *
-     * @param array $shipmentFieldsetData
-     * @return DestinationDto
-     */
-    private function createDestination(array $shipmentFieldsetData): DestinationDto
-    {
-        /** @var DestinationDto $destination */
-        $destination = $this->abstractDtoBuilder->buildDtoInstance(DestinationDto::class);
-        $destination->setCountryCode($shipmentFieldsetData['destination_country'])
-            ->setPointName($shipmentFieldsetData['point_name']);
-        return $destination;
-    }
-
-    /**
      * Create priority
      *
      * @param array $shipmentFieldsetData
@@ -272,26 +291,6 @@ class ShipmentProcessor extends CommonProcessor
     private function createPriority(array $shipmentFieldsetData): string
     {
         return $shipmentFieldsetData['priority'];
-    }
-
-    /**
-     * Create value added services
-     *
-     * @param array $shipmentFieldsetData
-     * @return ValueAddedServicesDto
-     */
-    private function createValueAddedServices(array $shipmentFieldsetData): ValueAddedServicesDto
-    {
-        /** @var InsuranceDto $insurance */
-        $insurance = $this->abstractDtoBuilder->buildDtoInstance(InsuranceDto::class);
-        $insurance->setValue((float) $shipmentFieldsetData['insurance_value'])
-            ->setCurrency($shipmentFieldsetData['insurance_currency']);
-
-        /** @var ValueAddedServicesDto $valueAddedServices */
-        $valueAddedServices = $this->abstractDtoBuilder->buildDtoInstance(ValueAddedServicesDto::class);
-        $valueAddedServices->setInsurance($insurance);
-
-        return $valueAddedServices;
     }
 
     /**

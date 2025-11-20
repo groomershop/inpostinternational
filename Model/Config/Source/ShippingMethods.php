@@ -11,7 +11,11 @@ use Magento\Store\Model\ScopeInterface;
 
 class ShippingMethods implements OptionSourceInterface
 {
-    private const INPOST_CARRIER_CODES = ['inpostinternationalcourier', 'mondialrelaycourier'];
+    private const INPOST_CARRIER_CODES = [
+        'inpostinternationalcourier',
+        'mondialrelaycourier',
+        'inpostinternationald2d'
+    ];
 
     /**
      * Shipping methods mapper
@@ -64,5 +68,16 @@ class ShippingMethods implements OptionSourceInterface
         }
 
         return $methods;
+    }
+
+    /**
+     * Get shipping method destination type
+     *
+     * @param string $shippingMethodCode
+     * @return string
+     */
+    public function getShippingMethodDestinationType(string $shippingMethodCode): string
+    {
+        return str_ends_with($shippingMethodCode, 'address') ? 'address' : 'point';
     }
 }

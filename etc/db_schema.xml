@@ -103,8 +103,13 @@
         <column xsi:type="varchar" name="origin_country_code" nullable="false" length="3" comment="Origin country code"/>
         <column xsi:type="varchar" name="origin_shipping_methods" nullable="true" length="255" comment="Origin shipping methods"/>
         <!-- Destination -->
-        <column xsi:type="varchar" name="destination_country_code" nullable="false" length="3" comment="Destination country code"/>
-        <column xsi:type="varchar" name="destination_point_name" nullable="false" length="16" comment="Destination point name"/>
+        <column xsi:type="varchar" name="destination_country_code" nullable="true" length="3" comment="Destination country code"/>
+        <column xsi:type="varchar" name="destination_point_name" nullable="true" length="16" comment="Destination point name"/>
+        <column xsi:type="varchar" name="destination_house_number" nullable="true" length="8" comment="Destination house number"/>
+        <column xsi:type="varchar" name="destination_flat_number" nullable="true" length="8" comment="Destination flat number"/>
+        <column xsi:type="varchar" name="destination_street" nullable="true" length="255" comment="Destination street"/>
+        <column xsi:type="varchar" name="destination_city" nullable="true" length="255" comment="Destination city"/>
+        <column xsi:type="varchar" name="destination_postal_code" nullable="true" length="255" comment="Destination postal code"/>
         <!-- Other -->
         <column xsi:type="varchar" name="priority" nullable="false" length="16" comment="Priority"/>
         <column xsi:type="decimal" name="insurance_value" nullable="true" precision="10" scale="2" comment="Insurance value"/>

@@ -8,49 +8,42 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
-use Smartcore\InPostInternational\Model\Config\CountrySettings;
-use Smartcore\InPostInternational\Model\ConfigProvider;
 use Smartcore\InPostInternational\Model\InPostShipmentFactory;
+use Smartcore\InPostInternational\Model\PickupAddressRepository;
 
-class PointToPointShipmentDtoFactory
+class AddressToAddressShipmentDtoFactory
 {
-
     /**
-     * PointToPointShipmentDto constructor
-     *
      * @param InPostShipmentFactory $shipmentFactory
      * @param AbstractDtoBuilder $abstractDtoBuilder
-     * @param ConfigProvider $configProvider
+     * @param PickupAddressRepository $pickupAddrRepository
      * @param Context $context
      * @param Registry $registry
-     * @param CountrySettings $countrySettings
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      */
     public function __construct(
         private readonly InPostShipmentFactory $shipmentFactory,
         private readonly AbstractDtoBuilder $abstractDtoBuilder,
-        private readonly ConfigProvider $configProvider,
+        private readonly PickupAddressRepository $pickupAddrRepository,
         private readonly Context $context,
         private readonly Registry $registry,
-        private readonly CountrySettings $countrySettings,
         private readonly ?AbstractResource $resource = null,
         private readonly ?AbstractDb $resourceCollection = null
     ) {
     }
 
     /**
-     * Create a new PointToPointShipmentDto instance
+     * Create AddressToAddressShipmentDto instance
      *
-     * @return PointToPointShipmentDto
+     * @return AddressToAddressShipmentDto
      */
-    public function create(): PointToPointShipmentDto
+    public function create(): AddressToAddressShipmentDto
     {
-        return new PointToPointShipmentDto(
+        return new AddressToAddressShipmentDto(
             $this->shipmentFactory,
             $this->abstractDtoBuilder,
-            $this->configProvider,
-            $this->countrySettings,
+            $this->pickupAddrRepository,
             $this->context,
             $this->registry,
             $this->resource,

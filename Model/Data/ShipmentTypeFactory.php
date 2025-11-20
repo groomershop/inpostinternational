@@ -14,10 +14,15 @@ class ShipmentTypeFactory
      *
      * @param AddressToPointShipmentDtoFactory $addrToPointFactory
      * @param PointToPointShipmentDtoFactory $pointToPointFactory
+     * @param PointToAddressShipmentDtoFactory $pointToAddressFactory
+     * @param AddressToAddressShipmentDtoFactory $addrToAddressFactory
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         private readonly AddressToPointShipmentDtoFactory $addrToPointFactory,
-        private readonly PointToPointShipmentDtoFactory   $pointToPointFactory
+        private readonly PointToPointShipmentDtoFactory   $pointToPointFactory,
+        private readonly PointToAddressShipmentDtoFactory $pointToAddressFactory,
+        private readonly AddressToAddressShipmentDtoFactory $addrToAddressFactory
     ) {
     }
 
@@ -33,6 +38,8 @@ class ShipmentTypeFactory
         $factoryMap = [
             'address-to-point' => $this->addrToPointFactory,
             'point-to-point' => $this->pointToPointFactory,
+            'point-to-address' => $this->pointToAddressFactory,
+            'address-to-address' => $this->addrToAddressFactory,
         ];
 
         if (!isset($factoryMap[$shipmentType])) {
