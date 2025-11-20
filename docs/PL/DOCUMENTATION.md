@@ -435,7 +435,7 @@ Identyfikator punktu odbioru wybranego w procesie zamówienia jest zapisywany w 
 `inpostinternational_locker_data` w formacie JSON.
 
 ### Events
-Moduł wykorzystuje następujące eventy:
+Moduł wykorzystuje następujące eventy:  
 `sales_order_place_after` - automatyczne tworzenie przesyłki   
 `inpostinternational_shipment_created` - aktualizacja statusu zamówienia oraz tworzenie Magento order shipment   
 `sales_model_service_quote_submit_before` - zapis punktu odbioru do zamówienia  
