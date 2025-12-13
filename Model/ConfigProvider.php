@@ -379,11 +379,14 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * Check if the shipping method is supported
      *
-     * @param string $shippingMethod
+     * @param string|null $shippingMethod
      * @return bool
      */
-    public function isSupportedShippingMethod(string $shippingMethod): bool
+    public function isSupportedShippingMethod(?string $shippingMethod): bool
     {
+        if ($shippingMethod === null) {
+            return false;
+        }
         foreach ($this->couriers as $courier) {
             if (str_contains($shippingMethod, array_key_first($courier->getAllowedMethods()))) {
                 return true;
