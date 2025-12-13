@@ -52,7 +52,6 @@ use Smartcore\InPostInternational\Block\Adminhtml\Order\View\InPostInternational
                     </tbody>
                 </table>
             <?php endif ?>
-            <?php $selectedMethod = $block->getSelectedMethod() ?? '';?>
             <?php $order = $block->getOrder(); ?>
             <form action="<?= $escaper->escapeUrl($block->getUrl('inpostinternational/shipment/create')) ?>"
                   class="inpost-shipments-form">

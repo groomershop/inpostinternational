@@ -40,10 +40,10 @@ class InPostInternationalOrderView extends AbstractOrder
     /**
      * Get the list of Inpost shipping types
      *
-     * @param string $shippingMethod
+     * @param string|null $shippingMethod
      * @return array<mixed>
      */
-    public function getInpostShippingTypes(string $shippingMethod): array
+    public function getInpostShippingTypes(?string $shippingMethod): array
     {
         $destinationType = $this->shippingMethods->getShippingMethodDestinationType($shippingMethod);
         return [
@@ -58,20 +58,6 @@ class InPostInternationalOrderView extends AbstractOrder
                 'selected' => $destinationType === 'point',
             ],
         ];
-    }
-
-    /**
-     * Get the selected shipping method for the order
-     *
-     * @return string
-     */
-    public function getSelectedMethod(): string
-    {
-        try {
-            return $this->getOrder()->getShippingMethod();
-        } catch (LocalizedException $e) {
-            return '';
-        }
     }
 
     /**

@@ -73,11 +73,14 @@ class ShippingMethods implements OptionSourceInterface
     /**
      * Get shipping method destination type
      *
-     * @param string $shippingMethodCode
+     * @param string|null $shippingMethodCode
      * @return string
      */
-    public function getShippingMethodDestinationType(string $shippingMethodCode): string
+    public function getShippingMethodDestinationType(?string $shippingMethodCode): string
     {
+        if ($shippingMethodCode === null) {
+            return 'point';
+        }
         return str_ends_with($shippingMethodCode, 'address') ? 'address' : 'point';
     }
 }
