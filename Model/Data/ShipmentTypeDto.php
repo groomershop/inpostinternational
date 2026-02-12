@@ -26,8 +26,8 @@ class ShipmentTypeDto extends AbstractDto
         private readonly InPostShipmentFactory $shipmentFactory,
         Context                          $context,
         Registry                         $registry,
-        AbstractResource                 $resource = null,
-        AbstractDb                       $resourceCollection = null
+        ?AbstractResource                $resource = null,
+        ?AbstractDb                      $resourceCollection = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection);
     }

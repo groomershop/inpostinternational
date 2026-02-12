@@ -34,7 +34,7 @@ class Logo
      * @param int|null $storeId
      * @return string
      */
-    public function getLogoUrl(string $carrierCode = null, ?int $storeId = null): string
+    public function getLogoUrl(?string $carrierCode = null, ?int $storeId = null): string
     {
         $logoPath = $this->getConfiguredLogoPath(self::XML_PATH_LOGO, $carrierCode, $storeId);
         if ($logoPath) {

@@ -1,6 +1,10 @@
 # Changelog for Smartcore InPost International
 All notable changes to this project will be documented in this file.
 
+## 1.4.0 - 2026-02-12
+### Added
+- Extended supported version of PHP to < 8.5
+
 ## 1.3.1 - 2025-12-13
 ### Fixed
 - Errors when order has no shipping method
