@@ -26,8 +26,8 @@ class OneTimePickupDto extends AbstractDto
         private readonly PickupFactory $pickupFactory,
         Context                          $context,
         Registry                         $registry,
-        AbstractResource                 $resource = null,
-        AbstractDb                       $resourceCollection = null
+        ?AbstractResource                $resource = null,
+        ?AbstractDb                      $resourceCollection = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection);
     }

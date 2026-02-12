@@ -32,7 +32,7 @@ Moduł jest przeznaczony dla sklepów opartych na Magento od wersji 2.4.4.
 Wymagania systemowe:
 ```json
 {
-    "php": ">=8.1.0 <8.3.0",
+    "php": ">=8.1.0 <8.5.0",
     "magento/framework": "^103.0.0",
     "magento/module-backend": "^102.0.0",
     "magento/module-store": "^101.0.0",
